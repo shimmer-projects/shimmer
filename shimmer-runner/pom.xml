@@ -23,6 +23,10 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+        <dependency>
             <groupId>io.github.shimmer-projects</groupId>
             <artifactId>shimmer-core</artifactId>
             <version>${project.parent.version}</version>
@@ -31,67 +35,40 @@
             <groupId>com.github.xiaoymin</groupId>
             <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <!-- scope元素主要用来控制依赖的使用范围，指定当前包的依赖范围和依赖的传递性，也就是哪些依赖在哪些classpath中可用。
+               常见的可选值有：
+               compile    : 默认值。compile表示对应依赖会参与当前项目的编译、测试、运行等，是一个比较强的依赖。打包时通常会包含该依赖，部署时会打包到lib目录下。
+               provided   : provided适合在编译和测试的环境，和compile功能相似，但provide仅在编译和测试阶段生效，provide不会被打包，也不具有传递性。
+               runtime    : runtime仅仅适用于运行和测试环节，在编译环境下不会被使用。比如编译时只需要JDBC API的jar，而只有运行时才需要JDBC驱动实现。
+               test       : scope为test表示依赖项目仅参与测试环节，在编译、运行、打包时不会使用。最常见的使用就是单元测试类了
+               system     : system范围依赖与provided类似，不过依赖项不会从maven仓库获取，而需要从本地文件系统提供。使用时，一定要配合systemPath属性。不推荐使用，尽量从Maven库中引用依赖。
+               等。-->
+            <scope>runtime</scope>
+            <!-- 表示依赖是否传递 false表示具有传递性 true表示不具有传递性-->
+            <optional>true</optional>
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <parameters>true</parameters>
-                    <source>${maven.compiler.source}</source>
-                    <target>${maven.compiler.target}</target>
-                    <encoding>${project.build.sourceEncoding}</encoding>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar-no-fork</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>sign</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <extensions>true</extensions>
-                <configuration>
-                    <serverId>ossrh</serverId>
-                    <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
-                    <autoReleaseAfterClose>false</autoReleaseAfterClose>
-                </configuration>
+                <artifactId>maven-jar-plugin</artifactId>
+                <!--                <configuration>-->
+                <!--                    <archive>-->
+                <!--                        &lt;!&ndash; 生成的jar中不要包含pom.xml和pom.properties这两个文件 &ndash;&gt;-->
+                <!--                        <addMavenDescriptor>false</addMavenDescriptor>-->
+                <!--                        <manifest>-->
+                <!--                            <addClasspath>true</addClasspath>-->
+                <!--                            <classpathPrefix>lib/</classpathPrefix>-->
+                <!--                            &lt;!&ndash;这里需要修改为你的项目的主启动类&ndash;&gt;-->
+                <!--                            <mainClass>io.github.shimmer.runner.AppStarter</mainClass>-->
+                <!--                        </manifest>-->
+                <!--                    </archive>-->
+                <!--                </configuration>-->
             </plugin>
         </plugins>
     </build>
