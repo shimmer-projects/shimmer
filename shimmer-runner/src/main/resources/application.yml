@@ -1,3 +1,102 @@
 server:
+  port: 9527
   servlet:
     context-path: /shimmer
+  # 开启http2支持， http2必须启用ssl
+  http2:
+    enabled: false
+  # 开启https,配置跟证书对应
+  ssl:
+    enabled: false
+    key-store: classpath:https.keystore
+    key-store-type: JKS
+    # 密码
+    key-store-password: 123456
+    key-password: 123456
+    # 别名
+    key-alias: shimmer
+  max-http-request-header-size: 8192
+
+logging:
+  level:
+    _org: INFO
+    org:
+      hibernate: INFO
+      springframework:
+        boot:
+          autoconfigure:
+            logging: INFO
+
+spring:
+  application:
+    name: shimmer
+  profiles:
+    active: dev
+  servlet:
+    multipart:
+      enabled: true
+      # 指定上载文件允许的最大大小。 默认值为1MB
+      max-file-size: 50MB
+      # 指定multipart/form-data请求允许的最大大小。 默认值为10MB。
+      max-request-size: 50MB
+      # 指定将存储上载文件的目录。未指定时，将使用临时目录。
+      location: /data/temp
+      # 指定文件将写入磁盘的大小阈值。 默认值为0。
+      file-size-threshold: 0
+  devtools:
+    restart:
+      enabled: true
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    locale: zh_CN
+    time-zone: GMT+8
+    # 设置返回json数据null字段不显示
+    default-property-inclusion: non_null
+  jpa:
+    hibernate:
+      ddl-auto: update  # 第一次建表create  后面用update，要不然每次重启都会新建表
+    open-in-view: false
+    #数据库引擎
+    database-platform: org.hibernate.dialect.MySQLDialect
+    #数据库
+    database: mysql
+    #控制台打印jpa的执行sql
+    show-sql: true
+    #是否执行datasource.schema脚本
+    generate-ddl: false
+    properties:
+      hibernate:
+        format_sql: false
+  datasource:
+    #数据库地址
+    url: jdbc:mysql://localhost:3306/shimmer?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
+    #数据库用户名
+    username: root
+    #数据库密码
+    password: Root@12345
+    #驱动类
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    #数据源的类型
+    type: com.zaxxer.hikari.HikariDataSource
+    #数据库连接池hikari配置信息
+    hikari:
+      #此属性控制从池返回的连接的默认自动提交行为,默认值：true
+      auto-commit: true
+      #最小空闲连接数量
+      minimum-idle: 1
+      #空闲连接存活最大时间，默认600000（10分钟）
+      idle-timeout: 60000
+      #数据库连接超时时间,默认30秒，即30000
+      connection-timeout: 30000
+      #此属性控制池中连接的最长生命周期，值0表示无限生命周期，默认1800000即30分钟
+      max-lifetime: 1800000
+      #连接池母子
+      pool-name: DatebookHikariCP
+      #连接池最大连接数，默认是10
+      maximum-pool-size: 5
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+    encoding: UTF-8 #编码
+    suffix: .html #模板后缀
+    mode: HTML #模板
