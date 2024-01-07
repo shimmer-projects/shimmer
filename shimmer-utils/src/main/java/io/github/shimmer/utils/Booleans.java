@@ -13,4 +13,10 @@ public class Booleans extends Nullables<Boolean> {
     Booleans(Boolean bool) {
         super.source = bool;
     }
+
+
+    public Booleans reverse() {
+        this.source = !source;
+        return this;
+    }
 }

@@ -76,6 +76,14 @@ public class Collections<T> extends Nullables<List<T>> {
         return this;
     }
 
+    public Booleans isEmpty() {
+        return isNull() ? new Booleans(true) : new Booleans(source.isEmpty());
+    }
+
+    public Booleans isNotEmpty() {
+        return isEmpty().reverse();
+    }
+
     public Set<T> toSet() {
         return new HashSet<>(source);
     }

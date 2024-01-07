@@ -47,4 +47,12 @@ public class Maps<K, V> extends Nullables<Map<K, V>> {
         super.source.put(key, value);
         return this;
     }
+
+    public Booleans isEmpty() {
+        return isNull() ? new Booleans(true) : new Booleans(source.isEmpty());
+    }
+
+    public Booleans isNotEmpty() {
+        return isEmpty().reverse();
+    }
 }
