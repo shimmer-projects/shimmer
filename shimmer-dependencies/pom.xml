@@ -31,6 +31,16 @@
             </dependency>
             <dependency>
                 <groupId>io.github.shimmer-projects</groupId>
+                <artifactId>shimmer-preferences</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.shimmer-projects</groupId>
+                <artifactId>shimmer-authority</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.shimmer-projects</groupId>
                 <artifactId>shimmer-runner</artifactId>
                 <version>${project.parent.version}</version>
             </dependency>

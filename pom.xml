@@ -13,6 +13,7 @@
         <module>shimmer-dependencies</module>
         <module>shimmer-example</module>
         <module>shimmer-authority</module>
+        <module>shimmer-preferences</module>
     </modules>
     <version>1.0.0-SNAPSHOT</version>
 
