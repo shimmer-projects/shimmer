@@ -16,6 +16,8 @@ server:
     # 别名
     key-alias: shimmer
   max-http-request-header-size: 8192
+  compression:
+    enabled: true
 
 logging:
   level:
@@ -56,44 +58,55 @@ spring:
     hibernate:
       ddl-auto: update  # 第一次建表create  后面用update，要不然每次重启都会新建表
     open-in-view: false
-    #数据库引擎
+    # 数据库引擎
     database-platform: org.hibernate.dialect.MySQLDialect
-    #数据库
+    # 数据库
     database: mysql
-    #控制台打印jpa的执行sql
+    # 控制台打印jpa的执行sql
     show-sql: true
-    #是否执行datasource.schema脚本
+    # 是否执行datasource.schema脚本
     generate-ddl: false
     properties:
       hibernate:
         format_sql: false
   datasource:
-    #数据库地址
-    url: jdbc:mysql://localhost:3306/shimmer?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
-    #数据库用户名
-    username: root
-    #数据库密码
-    password: Root@12345
-    #驱动类
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    #数据源的类型
+    # 数据源的类型
     type: com.zaxxer.hikari.HikariDataSource
-    #数据库连接池hikari配置信息
+    # 数据库连接池hikari配置信息
     hikari:
-      #此属性控制从池返回的连接的默认自动提交行为,默认值：true
+      # 此属性控制从池返回的连接的默认自动提交行为,默认值：true
       auto-commit: true
-      #最小空闲连接数量
+      # 最小空闲连接数量
       minimum-idle: 1
-      #空闲连接存活最大时间，默认600000（10分钟）
+      # 空闲连接存活最大时间，默认600000（10分钟）
       idle-timeout: 60000
-      #数据库连接超时时间,默认30秒，即30000
+      # 数据库连接超时时间,默认30秒，即30000
       connection-timeout: 30000
-      #此属性控制池中连接的最长生命周期，值0表示无限生命周期，默认1800000即30分钟
+      # 此属性控制池中连接的最长生命周期，值0表示无限生命周期，默认1800000即30分钟
       max-lifetime: 1800000
-      #连接池母子
+      # 连接池母子
       pool-name: DatebookHikariCP
-      #连接池最大连接数，默认是10
+      # 连接池最大连接数，默认是10
       maximum-pool-size: 5
+  flyway:
+    enabled: true
+    table: app_migration_history
+    # 编码格式，默认UTF-8
+    encoding: UTF-8
+    # 迁移sql脚本文件存放路径，默认db/migration
+    locations: classpath:db/migration
+    # 迁移sql脚本文件名称的前缀，默认V
+    sql-migration-prefix: V
+    # 迁移sql脚本文件名称的分隔符，默认2个下划线__
+    sql-migration-separator: __
+    # 迁移sql脚本文件名称的后缀
+    sql-migration-suffixes: .sql
+    # 迁移时是否进行校验，默认true
+    validate-on-migrate: true
+    # 当迁移发现数据库非空且存在没有元数据的表时，自动执行基准迁移，新建schema_version表
+    baseline-on-migrate: true
+    clean-on-validation-error: true
+    clean-disabled: false
   thymeleaf:
     cache: false
     prefix: classpath:/templates/

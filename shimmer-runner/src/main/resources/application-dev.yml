@@ -1,0 +1,74 @@
+spring:
+  datasource:
+    # 数据库地址
+    url: jdbc:mysql://localhost:3306/shimmer?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
+    # 数据库用户名
+    username: root
+    # 数据库密码
+    password: Root@12345
+    # 驱动类
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    redis:
+      repositories:
+        enabled: false
+      host: 127.0.0.1
+      # Redis服务器连接端口
+      port: 6379
+      # Redis服务器连接密码（默认为空）
+      password: ''
+      database: 0
+      # 连接超时时间（毫秒）
+      timeout: 30000
+      client-type: LETTUCE
+      lettuce:
+        pool:
+          # 连接池最大连接数（使用负值表示没有限制）
+          max-active: 8
+          # 连接池最大阻塞等待时间（使用负值表示没有限制）
+          max-wait: -1
+          # 连接池中的最大空闲连接
+          max-idle: 8
+          # 连接池中的最小空闲连接
+          min-idle: 1
+# ===== SpringDoc配置 =====#
+springdoc:
+  swagger-ui:
+    # 自定义的文档界面访问路径。默认访问路径是/swagger-ui.html
+    path: /swagger-ui.html
+    # 字符串类型，一共三个值来控制操作和标记的默认展开设置。它可以是“list”（仅展开标记）、“full”（展开标记和操作）或“none”（不展开任何内容）。
+    docExpansion: none
+    # 布尔值。控制“试用”请求的请求持续时间（毫秒）的显示。
+    displayRequestDuration: true
+    # 布尔值。控制供应商扩展（x-）字段和操作、参数和架构值的显示。
+    showExtensions: true
+    # 布尔值。控制参数的扩展名（pattern、maxLength、minLength、maximum、minminimum）字段和值的显示。
+    showCommonExtensions: true
+    # 布尔值。禁用swagger用户界面默认petstore url。（从v1.4.1开始提供）。
+    disable-swagger-default-url: true
+  api-docs:
+    # enabled the /v3/api-docs endpoint
+    enabled: true
+    # 自定义的文档api元数据访问路径。默认访问路径是/v3/api-docs
+    path: /v3/api-docs
+    version: OPENAPI_3_0
+    # 布尔值。在@Schema（名称name、标题title和说明description，三个属性）上启用属性解析程序。
+    resolve-schema-properties: true
+  # writer-with-default-pretty-printer: true
+  group-configs:
+    - group: 'default'
+      paths-to-match: '/**'
+      packages-to-scan: io.github.shimmer
+# knife4j的增强配置，不需要增强可以不配
+knife4j:
+  enable: true
+  setting:
+    language: zh_CN
+    enable-swagger-models: true
+    enable-document-manage: true
+
+shimmer:
+  core:
+    no-response-wrapper-packages:
+      - io.github.shimmer.**.controller1
+    print-exception-in-global-advice: true
