@@ -179,7 +179,7 @@ public class NotVoidResponseBodyAdvice implements ResponseBodyAdvice<Object> {
 //        }
         log.debug("完成结果值封装");
         return ApiResult.builder()
-                .code(ApiCode.ERROR.getCode())
+                .code(ApiCode.OK.getCode())
                 .msg("success")
                 .utc8(System.currentTimeMillis())
                 .data(body)
