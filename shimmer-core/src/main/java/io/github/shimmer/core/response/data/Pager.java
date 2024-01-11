@@ -1,4 +1,4 @@
-package io.github.shimmer.core.data;
+package io.github.shimmer.core.response.data;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

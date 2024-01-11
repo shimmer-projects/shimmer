@@ -1,7 +1,7 @@
 package io.github.shimmer.core.exception;
 
-import io.github.shimmer.core.data.ApiResult;
-import io.github.shimmer.core.data.BizStatus;
+import io.github.shimmer.core.response.data.ApiCode;
+import io.github.shimmer.core.response.data.ApiResult;
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.boot.web.servlet.error.ErrorController;
@@ -25,6 +25,6 @@ public class NotFoundErrorController implements ErrorController {
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public Object error(HttpServletRequest request) {
-        return ApiResult.builder().code(BizStatus.ERROR).msg("Page Not Found").build();
+        return ApiResult.builder().code(ApiCode.ERROR.getCode()).msg("Page Not Found").build();
     }
 }

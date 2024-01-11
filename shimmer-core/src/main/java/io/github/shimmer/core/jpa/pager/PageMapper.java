@@ -1,6 +1,6 @@
 package io.github.shimmer.core.jpa.pager;
 
-import io.github.shimmer.core.data.Pager;
+import io.github.shimmer.core.response.data.Pager;
 import org.springframework.data.domain.Page;
 
 /**

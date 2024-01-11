@@ -1,14 +1,17 @@
 package io.github.shimmer.core.exception;
 
-import io.github.shimmer.core.data.ApiResult;
-import io.github.shimmer.core.data.BizStatus;
-import io.github.shimmer.core.debounce.LimitAccessException;
+import io.github.shimmer.core.exception.annotation.ExceptionMapper;
+import io.github.shimmer.core.response.data.ApiCode;
+import io.github.shimmer.core.response.data.ApiResult;
+import io.github.shimmer.utils.Utils;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.TypeMismatchException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.validation.BindException;
@@ -39,7 +42,11 @@ import java.util.Set;
 @Slf4j
 @RestControllerAdvice
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
-public class ExceptionHandlerAdvice {
+public class GlobalExceptionHandlerAdvice {
+
+
+    @Value("${shimmer.core.print-exception-in-global-advice}")
+    private boolean printExceptionInGlobalAdvice;
 
     private static final String REASON = "%s, 原因: %s";
 
@@ -49,38 +56,10 @@ public class ExceptionHandlerAdvice {
      * 验证  对象类型参数
      * </p>
      */
-    @ExceptionHandler(BindException.class)
+    @ExceptionHandler(value = {BindException.class, MethodArgumentNotValidException.class})
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public ApiResult<?> handleBindException(BindException ex) {
-        List<ValidError> validErrors = buildValidFields(ex);
-        ApiResult<Object> apiResult = ApiResult
-                .builder()
-                .code(BizStatus.VALIDATION_FAILED)
-                .data(validErrors)
-                .msg("请求参数校验失败")
-                .build();
-        return apiResult;
-    }
-
-
-    /**
-     * 验证：对象类型参数 JSON body 参数
-     */
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public ApiResult<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-        List<ValidError> validErrors = buildValidFields(ex);
-        ApiResult<Object> apiResult = ApiResult.builder()
-                .code(BizStatus.VALIDATION_FAILED)
-                .data(validErrors)
-                .msg("请求参数校验失败")
-                .build();
-        return apiResult;
-    }
-
-    private List<ValidError> buildValidFields(BindException ex) {
         List<FieldError> fieldErrors = ex.getFieldErrors();
         List<ValidError> validErrors = new ArrayList<>();
         for (FieldError error : fieldErrors) {
@@ -94,7 +73,13 @@ public class ExceptionHandlerAdvice {
                     .build();
             validErrors.add(validError);
         }
-        return validErrors;
+        ApiResult<Object> apiResult = ApiResult
+                .builder()
+                .code(ApiCode.INVALID.getCode())
+                .data(validErrors)
+                .msg("请求参数校验失败")
+                .build();
+        return apiResult;
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
@@ -121,7 +106,7 @@ public class ExceptionHandlerAdvice {
         log.warn("以下请求参数非法: {}", validErrors);
         ApiResult<Object> apiResult = ApiResult
                 .builder()
-                .code(BizStatus.ERROR)
+                .code(ApiCode.INVALID.getCode())
                 .data(validErrors)
                 .msg("请求参数校验失败")
                 .build();
@@ -250,25 +235,10 @@ public class ExceptionHandlerAdvice {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
     public ApiResult<?> handleBizException(BizException ex) {
-        log.warn("业务异常: {}", ex.getMessage(), ex);
-        return ApiResult.fail(ex.getMessage());
-    }
-
-    @ExceptionHandler(LimitAccessException.class)
-    @ResponseStatus(HttpStatus.BANDWIDTH_LIMIT_EXCEEDED)
-    @ResponseBody
-    public ApiResult<?> handleLimitAccessException(LimitAccessException ex) {
-        return ApiResult.fail("请求过于频繁");
-    }
-
-    /**
-     * 统一业务异常处理
-     */
-    @ExceptionHandler(CacheException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ResponseBody
-    public ApiResult<?> CacheException(CacheException ex) {
-        return ApiResult.fail(String.format(REASON, "缓存异常", ex.getMessage()));
+        if (printExceptionInGlobalAdvice) {
+            log.error("Response:GlobalExceptionHandleAdvice捕获到异常,message=[{}]", ex.getMessage(), ex);
+        }
+        return ApiResult.fail(ex.getCode(), ex.getMessage());
     }
 
     /**
@@ -277,8 +247,31 @@ public class ExceptionHandlerAdvice {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
-    public ApiResult<?> handleGlobalException(Exception ex) {
-        return ApiResult.fail(String.format(REASON, "系统内部异常", ex.getMessage()));
+    public ResponseEntity<ApiResult<?>> handleGlobalException(Throwable throwable) {
+        if (printExceptionInGlobalAdvice) {
+            log.error("Response:GlobalExceptionHandleAdvice捕获到异常,message=[{}]", throwable.getMessage(), throwable);
+        }
+        Class<? extends Throwable> clazz = throwable.getClass();
+        ExceptionMapper exceptionMapper = clazz.getAnnotation(ExceptionMapper.class);
+        // 1.有@ExceptionMapper注解，直接设置结果的状态
+        if (Utils.useNullables(exceptionMapper).isNotNull()) {
+            String message = exceptionMapper.msg();
+            boolean msgReplaceable = exceptionMapper.msgReplaceable();
+            //异常提示可替换+抛出来的异常有自定义的异常信息
+            if (msgReplaceable) {
+                String throwableMessage = throwable.getMessage();
+                if (Utils.useNullables(throwableMessage).isNotNull()) {
+                    message = throwableMessage;
+                }
+            }
+            ApiResult<Object> res = ApiResult.fail(exceptionMapper.code(), message);
+            return ResponseEntity.status(exceptionMapper.httpStatus()).body(res);
+
+        }
+
+        // 2.原生异常直接包装返回
+        ApiResult<Object> res = ApiResult.fail(String.format(REASON, "系统内部异常", throwable.getMessage()));
+        return ResponseEntity.internalServerError().body(res);
     }
 
 }
