@@ -22,7 +22,7 @@ import java.util.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SpecificationBuilder<ENTITY> implements Specification<ENTITY> {
+public class Spec<ENTITY> implements Specification<ENTITY> {
 
     private ENTITY entity;
 
@@ -74,7 +74,7 @@ public class SpecificationBuilder<ENTITY> implements Specification<ENTITY> {
                         }
                     }
                 } catch (IllegalAccessException e) {
-                    e.printStackTrace();
+                    throw new RuntimeException("JPA查询条件构建异常，请检查查询实体相关配置的准确性.");
                 }
             }
             clazz = clazz.getSuperclass();

@@ -1,7 +1,7 @@
 package io.github.shimmer.core.jpa.repository;
 
 import io.github.shimmer.core.constant.Delete;
-import io.github.shimmer.core.jpa.condition.SpecificationBuilder;
+import io.github.shimmer.core.jpa.condition.Spec;
 import io.github.shimmer.core.jpa.entity.BaseEntity;
 import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
@@ -39,20 +39,20 @@ public class BaseJpaRepositoryImpl<T extends BaseEntity<ID>, ID extends Serializ
 
     @Override
     public List<T> queryWithConditionEntity(T entity) {
-        SpecificationBuilder<T> specificationBuilder = SpecificationBuilder.<T>builder().entity(entity).build();
-        return this.findAll(specificationBuilder);
+        Spec<T> spec = Spec.<T>builder().entity(entity).build();
+        return this.findAll(spec);
     }
 
     @Override
     public List<T> queryWithConditionEntity(T entity, Sort sort) {
-        SpecificationBuilder<T> specificationBuilder = SpecificationBuilder.<T>builder().entity(entity).build();
-        return this.findAll(specificationBuilder, sort);
+        Spec<T> spec = Spec.<T>builder().entity(entity).build();
+        return this.findAll(spec, sort);
     }
 
     @Override
     public Page<T> queryWithConditionEntity(T entity, Pageable pageable) {
-        SpecificationBuilder<T> specificationBuilder = SpecificationBuilder.<T>builder().entity(entity).build();
-        return this.findAll(specificationBuilder, pageable);
+        Spec<T> spec = Spec.<T>builder().entity(entity).build();
+        return this.findAll(spec, pageable);
     }
 
     @Override
