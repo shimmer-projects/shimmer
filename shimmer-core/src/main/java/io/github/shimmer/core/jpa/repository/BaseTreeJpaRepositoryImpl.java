@@ -1,11 +1,12 @@
 package io.github.shimmer.core.jpa.repository;
 
-import io.github.shimmer.core.jpa.condition.SpecificationBuilder;
+import io.github.shimmer.core.jpa.condition.Spec;
 import io.github.shimmer.core.jpa.entity.BaseEntity;
 import io.github.shimmer.core.jpa.entity.BaseTreeEntity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.Path;
 import jakarta.persistence.criteria.Predicate;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
  *
  * @author yu_haiyang
  */
+@Slf4j
 public class BaseTreeJpaRepositoryImpl<T extends BaseTreeEntity<T, ID>, ID extends Serializable>
         extends BaseJpaRepositoryImpl<T, ID>
         implements BaseTreeJpaRepository<T, ID> {
@@ -55,7 +57,7 @@ public class BaseTreeJpaRepositoryImpl<T extends BaseTreeEntity<T, ID>, ID exten
 
     @Override
     public List<T> queryTree(T entity, ID rootId) {
-        SpecificationBuilder<T> spec = SpecificationBuilder.<T>builder().entity(entity).build();
+        Spec<T> spec = Spec.<T>builder().entity(entity).build();
         return queryTree(spec, rootId);
     }
 
