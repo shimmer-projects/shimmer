@@ -70,5 +70,5 @@ knife4j:
 shimmer:
   core:
     no-response-wrapper-packages:
-      - io.github.shimmer.**.controller1
+      - org.springdoc.**
     print-exception-in-global-advice: true
