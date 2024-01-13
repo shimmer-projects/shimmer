@@ -17,11 +17,29 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.github.shimmer-projects</groupId>
+                <artifactId>shimmer-dependencies</artifactId>
+                <version>${project.parent.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <dependencies>
         <dependency>
             <groupId>io.github.shimmer-projects</groupId>
-            <artifactId>shimmer-core</artifactId>
-            <version>${project.parent.version}</version>
+            <artifactId>shimmer-preferences</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.shimmer-projects</groupId>
+            <artifactId>shimmer-authority</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.shimmer-projects</groupId>
+            <artifactId>shimmer-ui</artifactId>
         </dependency>
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
@@ -61,6 +79,94 @@
                 <!--                        </manifest>-->
                 <!--                    </archive>-->
                 <!--                </configuration>-->
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>appassembler-maven-plugin</artifactId>
+                <version>2.1.0</version>
+                <configuration>
+                    <!-- flat与lib共同决定将项目用的的所有jar包复制到lib目录下 -->
+                    <!-- lib目录中jar的存放规则，默认是${groupId}/${artifactId}的目录格式，flat表示直接把jar放到lib目录 -->
+                    <repositoryLayout>flat</repositoryLayout>
+                    <!--从哪里copy配置文件-->
+                    <configurationSourceDirectory>src/main/resources</configurationSourceDirectory>
+                    <includeConfigurationDirectoryInClasspath>true</includeConfigurationDirectoryInClasspath>
+                    <!--是否copy配置文件-->
+                    <copyConfigurationDirectory>true</copyConfigurationDirectory>
+                    <!--配置文件存放在conf目录路径-->
+                    <configurationDirectory>conf</configurationDirectory>
+                    <!-- 打包的jar，以及maven依赖的jar放到这个目录里面 -->
+                    <repositoryName>lib</repositoryName>
+                    <!-- 可执行脚本的目录 -->
+                    <binFolder>bin</binFolder>
+
+                    <!-- 生成linux, windows两种平台的执行脚本 -->
+                    <platforms>
+                        <platform>windows</platform>
+                        <platform>unix</platform>
+                    </platforms>
+                    <!-- 针对不同平台生成不同类型的启动脚本 -->
+                    <binFileExtensions>
+                        <unix>.sh</unix>
+                        <windows>.bat</windows>
+                    </binFileExtensions>
+
+                    <!--编码，日志-->
+                    <encoding>${maven.compiler.encoding}</encoding>
+                    <logsDirectory>logs</logsDirectory>
+                    <tempDirectory>tmp</tempDirectory>
+                    <programs>
+                        <program>
+                            <mainClass>io.github.shimmer.runner.AppStarter</mainClass>
+                            <jvmSettings>
+                                <extraArguments>
+                                    <extraArgument>-server</extraArgument>
+                                    <extraArgument>-Xms128M</extraArgument>
+                                    <extraArgument>-Xmx2G</extraArgument>
+                                </extraArguments>
+                            </jvmSettings>
+                        </program>
+                    </programs>
+                </configuration>
+
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>assemble</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- 排除resources下面的yml(因为我们需要把它放在jar外部,不能让jar打包插件将其打入jar包classpath下去) -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <!-- 打包后的包名是否包含assembly的id名 -->
+                    <appendAssemblyId>false</appendAssemblyId>
+                    <!-- 指定最后tar或者zip包的名字 -->
+                    <finalName>shimmer-${project.parent.version}</finalName>
+                    <!-- tar或者zip包的输出目录 -->
+                    <outputDirectory>target/</outputDirectory>
+                    <descriptors>
+                        <!-- 引用的assembly配置文件，可以用多个，即可以同时打包多个格式的包 -->
+                        <descriptor>assembly.xml</descriptor>
+                    </descriptors>
+                </configuration>
+                <executions>
+                    <execution>
+                        <!--名字任意 -->
+                        <id>make-assembly</id>
+                        <!-- 绑定到package生命周期阶段上 -->
+                        <phase>package</phase>
+                        <goals>
+                            <!-- 只运行一次 -->
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

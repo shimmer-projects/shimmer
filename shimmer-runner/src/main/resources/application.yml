@@ -1,7 +1,7 @@
 server:
   port: 9527
-  servlet:
-    context-path: /shimmer
+  #  servlet:
+  #    context-path: /shimmer
   # 开启http2支持， http2必须启用ssl
   http2:
     enabled: false
