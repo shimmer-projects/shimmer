@@ -1,6 +1,7 @@
 package io.github.shimmer.core.exception;
 
 import io.github.shimmer.core.exception.annotation.ExceptionMapper;
+import io.github.shimmer.core.response.StringToApiResult;
 import io.github.shimmer.core.response.data.ApiCode;
 import io.github.shimmer.core.response.data.ApiResult;
 import io.github.shimmer.utils.Utils;
@@ -51,6 +52,18 @@ public class GlobalExceptionHandlerAdvice {
     private static final String REASON = "%s, 原因: %s";
 
     /**
+     * 将string类型返回值的接口转换成返回json格式的接口
+     *
+     * @param result 传值异常
+     * @return 转换后的结果
+     */
+    @ExceptionHandler(StringToApiResult.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public ApiResult<Object> stringToApiResult(StringToApiResult result) {
+        return result.getApiResult();
+    }
+    /**
      * <p>
      * 参数校验异常
      * 验证  对象类型参数
@@ -59,7 +72,7 @@ public class GlobalExceptionHandlerAdvice {
     @ExceptionHandler(value = {BindException.class, MethodArgumentNotValidException.class})
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public ApiResult<?> handleBindException(BindException ex) {
+    public ApiResult<Object> handleBindException(BindException ex) {
         List<FieldError> fieldErrors = ex.getFieldErrors();
         List<ValidError> validErrors = new ArrayList<>();
         for (FieldError error : fieldErrors) {
@@ -73,25 +86,24 @@ public class GlobalExceptionHandlerAdvice {
                     .build();
             validErrors.add(validError);
         }
-        ApiResult<Object> apiResult = ApiResult
+        return ApiResult
                 .builder()
                 .code(ApiCode.INVALID.getCode())
                 .data(validErrors)
                 .msg("请求参数校验失败")
                 .build();
-        return apiResult;
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public ApiResult<?> handleConstraintViolationException(ConstraintViolationException ex) {
+    public ApiResult<Object> handleConstraintViolationException(ConstraintViolationException ex) {
         List<ValidError> validErrors = new ArrayList<>();
         Set<ConstraintViolation<?>> violations = ex.getConstraintViolations();
         for (ConstraintViolation<?> violation : violations) {
             Object invalidValue = violation.getInvalidValue();
-            if (invalidValue instanceof MultipartFile) {
-                invalidValue = ((MultipartFile) invalidValue).getOriginalFilename();
+            if (invalidValue instanceof MultipartFile multipartFile) {
+                invalidValue = multipartFile.getOriginalFilename();
             }
             String message = violation.getMessage();
             String path = violation.getPropertyPath().toString();
@@ -104,19 +116,18 @@ public class GlobalExceptionHandlerAdvice {
             validErrors.add(validError);
         }
         log.warn("以下请求参数非法: {}", validErrors);
-        ApiResult<Object> apiResult = ApiResult
+        return ApiResult
                 .builder()
                 .code(ApiCode.INVALID.getCode())
                 .data(validErrors)
                 .msg("请求参数校验失败")
                 .build();
-        return apiResult;
     }
 
     @ExceptionHandler(IOException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
-    public ApiResult<?> handleFileNotFoundException(IOException ex) {
+    public ApiResult<Object> handleFileNotFoundException(IOException ex) {
         String body = "系统找不到指定的文件或路径: " + ex.getMessage().substring(ex.getMessage().indexOf(": ") + 2);
         return ApiResult.fail(String.format(REASON, "文件找不到异常", body));
     }
@@ -128,7 +139,7 @@ public class GlobalExceptionHandlerAdvice {
     @ExceptionHandler(ArithmeticException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
-    public ApiResult<?> handleArithmeticException(ArithmeticException ex) {
+    public ApiResult<Object> handleArithmeticException(ArithmeticException ex) {
         return ApiResult.fail(String.format(REASON, "数学运算异常", ex.getMessage()));
     }
 
@@ -140,7 +151,7 @@ public class GlobalExceptionHandlerAdvice {
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
     @ResponseBody
-    public ApiResult<?> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException ex) {
+    public ApiResult<Object> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException ex) {
         return ApiResult.fail(String.format(REASON, "请求方法不允许", ex.getMessage()));
     }
 
@@ -153,7 +164,7 @@ public class GlobalExceptionHandlerAdvice {
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     @ResponseStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
     @ResponseBody
-    public ApiResult<?> handleHttpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException ex) {
+    public ApiResult<Object> handleHttpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException ex) {
         return ApiResult.fail(String.format(REASON, "请求媒体不支持", ex.getMessage()));
     }
 
@@ -163,7 +174,7 @@ public class GlobalExceptionHandlerAdvice {
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public ApiResult<?> handleIllegalArgumentException(IllegalArgumentException ex) {
+    public ApiResult<Object> handleIllegalArgumentException(IllegalArgumentException ex) {
         return ApiResult.fail(String.format(REASON, "请求参数不合法", ex.getMessage()));
     }
 
@@ -173,7 +184,7 @@ public class GlobalExceptionHandlerAdvice {
     @ExceptionHandler(NoHandlerFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ResponseBody
-    public ApiResult<?> handleNoHandlerFoundException(NoHandlerFoundException ex) {
+    public ApiResult<Object> handleNoHandlerFoundException(NoHandlerFoundException ex) {
         return ApiResult.fail(String.format(REASON, "请求路径不存在", ex.getRequestURL()));
     }
 
@@ -184,7 +195,7 @@ public class GlobalExceptionHandlerAdvice {
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiResult<?> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
+    public ApiResult<Object> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
         return ApiResult.fail(String.format(REASON, "请求body参数不可读", ex.getMessage()));
     }
 
@@ -194,7 +205,7 @@ public class GlobalExceptionHandlerAdvice {
     @ExceptionHandler(HttpMessageNotWritableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public ApiResult<?> handleHttpMessageNotWritableException(HttpMessageNotWritableException ex) {
+    public ApiResult<Object> handleHttpMessageNotWritableException(HttpMessageNotWritableException ex) {
         return ApiResult.fail(String.format(REASON, "响应序列化失败", ex.getMessage()));
     }
 
@@ -204,7 +215,7 @@ public class GlobalExceptionHandlerAdvice {
     @ExceptionHandler(MissingServletRequestParameterException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public ApiResult<?> handleMissingServletRequestParameterException(MissingServletRequestParameterException ex) {
+    public ApiResult<Object> handleMissingServletRequestParameterException(MissingServletRequestParameterException ex) {
         return ApiResult.fail(String.format(REASON, "缺少请求参数", ex.getParameterName()));
     }
 
@@ -216,7 +227,7 @@ public class GlobalExceptionHandlerAdvice {
     @ExceptionHandler(MissingPathVariableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public ApiResult<?> handleMissingPathVariableException(MissingPathVariableException ex) {
+    public ApiResult<Object> handleMissingPathVariableException(MissingPathVariableException ex) {
         return ApiResult.fail(String.format(REASON, "未检测到路径参数", ex.getParameter().getParameterName()));
     }
 
@@ -227,14 +238,14 @@ public class GlobalExceptionHandlerAdvice {
     @ExceptionHandler(TypeMismatchException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public ApiResult<?> handleTypeMismatchException(TypeMismatchException ex) {
+    public ApiResult<Object> handleTypeMismatchException(TypeMismatchException ex) {
         return ApiResult.fail(String.format(REASON, "参数类型匹配失败", ex.getPropertyName()));
     }
 
     @ExceptionHandler(BizException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
-    public ApiResult<?> handleBizException(BizException ex) {
+    public ApiResult<Object> handleBizException(BizException ex) {
         if (printExceptionInGlobalAdvice) {
             log.error("Response:GlobalExceptionHandleAdvice捕获到异常,message=[{}]", ex.getMessage(), ex);
         }
@@ -247,7 +258,7 @@ public class GlobalExceptionHandlerAdvice {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
-    public ResponseEntity<ApiResult<?>> handleGlobalException(Throwable throwable) {
+    public ResponseEntity<ApiResult<Object>> handleGlobalException(Throwable throwable) {
         if (printExceptionInGlobalAdvice) {
             log.error("Response:GlobalExceptionHandleAdvice捕获到异常,message=[{}]", throwable.getMessage(), throwable);
         }

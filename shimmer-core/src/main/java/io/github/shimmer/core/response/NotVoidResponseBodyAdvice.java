@@ -1,13 +1,11 @@
 package io.github.shimmer.core.response;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.shimmer.core.ShimmerCoreProperties;
 import io.github.shimmer.core.response.data.ApiCode;
 import io.github.shimmer.core.response.data.ApiResult;
 import io.github.shimmer.utils.Utils;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.Ordered;
@@ -23,36 +21,25 @@ import org.springframework.lang.NonNull;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import java.lang.reflect.Method;
 import java.util.List;
 
 /**
- * <p>
+ * 响应结果包装类
  *
  * @author yu_haiyang
- * @version 1.0
- * 2022-06-14 14:18
- * @see NotVoidResponseBodyAdvice
- * @since 1.0
  */
 @Slf4j
 @ControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
-public class NotVoidResponseBodyAdvice implements ResponseBodyAdvice<Object> {
+public class NotVoidResponseBodyAdvice extends AbstractCostResponseBodyAdvice {
 
     /**
      * 模块的配置信息
      */
     @Resource
     private ShimmerCoreProperties properties;
-
-    /**
-     * jackson处理器
-     */
-    @Resource
-    ObjectMapper objectMapper;
 
     /**
      * 路径过滤器
@@ -95,13 +82,10 @@ public class NotVoidResponseBodyAdvice implements ResponseBodyAdvice<Object> {
             }
         }
 
-        // 如果返回的是String类型的，直接进行包装
-        if (method.getReturnType().equals(String.class)) {
-            return true;
-        }
-
-        // method为空、返回值为void、非JSON，直接跳过
-        if (method.getReturnType().equals(Void.TYPE) || !MappingJackson2HttpMessageConverter.class.isAssignableFrom(clazz)) {
+        // 如果返回的是String类型的, method为空、返回值为void、非JSON，直接跳过
+        if (method.getReturnType().equals(String.class)
+                || method.getReturnType().equals(Void.TYPE)
+                || !MappingJackson2HttpMessageConverter.class.isAssignableFrom(clazz)) {
             log.debug("Response:method为空、返回值为void、非JSON，跳过");
             return false;
         }
@@ -110,13 +94,12 @@ public class NotVoidResponseBodyAdvice implements ResponseBodyAdvice<Object> {
         return true;
     }
 
-    @SneakyThrows(Exception.class)
     @Override
-    public Object beforeBodyWrite(Object body, @NonNull MethodParameter returnType,
-                                  @NonNull MediaType selectedContentType,
-                                  @NonNull Class selectedConverterType,
-                                  @NonNull ServerHttpRequest request,
-                                  @NonNull ServerHttpResponse response) {
+    protected Object doBeforeBodyWrite(Object body, @NonNull MethodParameter returnType,
+                                       @NonNull MediaType selectedContentType,
+                                       @NonNull Class<? extends HttpMessageConverter<?>> selectedConverterType,
+                                       @NonNull ServerHttpRequest request,
+                                       @NonNull ServerHttpResponse response) {
 
         log.debug("开始结果封装");
 
@@ -139,44 +122,6 @@ public class NotVoidResponseBodyAdvice implements ResponseBodyAdvice<Object> {
             return body;
         }
 
-        // 如果返回的是字符串特殊处理
-        // 过滤String类型，String单独序列化方式
-        // 方式1：将StringHttpMessageConverter从配置中移除 (不推荐)
-        // 方式2: 契合下StringHttpMessageConverter，封装ApiResult，然后将ApiResult进行Json字符串的转换
-        if (body instanceof String) {
-            log.info("String类型执行包装");
-            ApiResult<Object> apiResult = ApiResult.ok(body);
-            return objectMapper.writeValueAsString(apiResult);
-        }
-
-//        Class<?> targetClass = returnType.getContainingClass();
-//        Method targetMethod = returnType.getMethod();
-//        assert targetMethod != null;
-//
-//        // 对数据进行包装
-//        boolean restControllerPresent = targetClass.isAnnotationPresent(RestController.class);
-//        boolean responseBodyPresent = targetClass.isAnnotationPresent(ResponseBody.class);
-//        boolean restResourcePresent = targetClass.isAnnotationPresent(RestResource.class);
-//        boolean getResourcePresent = targetMethod.isAnnotationPresent(GetResource.class);
-//        boolean postResourcePresent = targetMethod.isAnnotationPresent(PostResource.class);
-//        boolean putResourcePresent = targetMethod.isAnnotationPresent(PutResource.class);
-//        boolean deleteResourcePresent = targetMethod.isAnnotationPresent(DeleteResource.class);
-//        boolean responseBodyPresentMethod = targetMethod.isAnnotationPresent(ResponseBody.class);
-//        if (restControllerPresent
-//                || responseBodyPresent
-//                || restResourcePresent
-//                || getResourcePresent
-//                || postResourcePresent
-//                || putResourcePresent
-//                || deleteResourcePresent
-//                || responseBodyPresentMethod) {
-//            return ApiResult.builder()
-//                    .code(BizStatus.SUCCESS)
-//                    .msg("success")
-//                    .utc8(System.currentTimeMillis())
-//                    .data(body)
-//                    .build();
-//        }
         log.debug("完成结果值封装");
         return ApiResult.builder()
                 .code(ApiCode.OK.getCode())

@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@JsonPropertyOrder({"code", "msg", "utc8", "data"})
+@JsonPropertyOrder({"code", "msg", "utc8", "cost", "data"})
 public class ApiResult<T> {
 
     /**
@@ -38,6 +38,11 @@ public class ApiResult<T> {
      */
     @Builder.Default
     private Long utc8 = System.currentTimeMillis();
+
+    /**
+     * 接口处理耗时
+     */
+    private Long cost;
 
     public static <T> ApiResult<T> fail(String msg) {
         return fail(ApiCode.ERROR, msg);

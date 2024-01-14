@@ -10,7 +10,6 @@ import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import java.util.Objects;
 
@@ -22,7 +21,7 @@ import java.util.Objects;
  */
 @ControllerAdvice
 @Order(value = 1000)
-public class VoidResponseBodyAdvice implements ResponseBodyAdvice<Object> {
+public class VoidResponseBodyAdvice extends AbstractCostResponseBodyAdvice {
 
     /**
      * 只处理返回空的Controller方法.
@@ -40,7 +39,7 @@ public class VoidResponseBodyAdvice implements ResponseBodyAdvice<Object> {
     }
 
     @Override
-    public Object beforeBodyWrite(Object body,
+    protected Object doBeforeBodyWrite(Object body,
                                   @NonNull MethodParameter returnType,
                                   @NonNull MediaType selectedContentType,
                                   @NonNull Class<? extends HttpMessageConverter<?>> selectedConverterType,
