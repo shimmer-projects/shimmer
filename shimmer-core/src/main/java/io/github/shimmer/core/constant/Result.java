@@ -8,15 +8,15 @@ package io.github.shimmer.core.constant;
  *
  * @author yu_haiyang
  */
-public enum Assertion implements BaseEnum<Integer> {
-    NO(0, "否", ""),
-    YES(1, "是", "");
+public enum Result implements BaseEnum<Integer> {
+    FAIL(0, "失败", ""),
+    SUCCESS(1, "成功", "");
 
     private final Integer code;
     private final String label;
     private final String description;
 
-    Assertion(Integer code, String label, String description) {
+    Result(Integer code, String label, String description) {
         this.code = code;
         this.label = label;
         this.description = description;
