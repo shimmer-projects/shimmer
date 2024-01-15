@@ -87,7 +87,7 @@ public class AuditLogAspect {
      * 该接口执行完之后，清理ThreadLocal中存储的数据
      */
     @After(value = "annotationPointCut()")
-    public void logAfter() {
+    public void after() {
         // 清理ThreadLocal
         startTime.remove();
     }
@@ -99,7 +99,7 @@ public class AuditLogAspect {
      * @param joinPoint 连接点
      */
     @AfterReturning(value = "annotationPointCut()", returning = "resultVal")
-    public void logAfterReturning(JoinPoint joinPoint, Object resultVal) {
+    public void afterReturning(JoinPoint joinPoint, Object resultVal) {
         buildLog(joinPoint, true);
     }
 
@@ -109,7 +109,7 @@ public class AuditLogAspect {
      * @param joinPoint 连接点
      */
     @AfterThrowing(value = "annotationPointCut()", throwing = "e")
-    public void AfterThrowing(JoinPoint joinPoint, Throwable e) {
+    public void afterThrowing(JoinPoint joinPoint, Throwable e) {
         buildLog(joinPoint, false);
     }
 
