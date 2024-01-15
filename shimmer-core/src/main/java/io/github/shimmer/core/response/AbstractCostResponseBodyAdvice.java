@@ -38,7 +38,6 @@ public abstract class AbstractCostResponseBodyAdvice implements ResponseBodyAdvi
         return done;
     }
 
-    @SneakyThrows
     protected abstract Object doBeforeBodyWrite(Object body,
                                                 @NonNull MethodParameter returnType,
                                                 @NonNull MediaType selectedContentType,
