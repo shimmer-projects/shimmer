@@ -18,6 +18,12 @@ server:
   max-http-request-header-size: 8192
   compression:
     enabled: true
+  servlet:
+    # 这将确保所有请求和响应都使用 UTF-8 编码，从而避免编码问题引起的XSS攻击。
+    encoding:
+      enabled: true
+      charset: UTF-8
+      force: true
 
 logging:
   level:
