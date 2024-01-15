@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@JsonPropertyOrder({"code", "msg", "utc8", "cost", "data"})
+@JsonPropertyOrder({"code", "desc", "time", "cost", "data"})
 public class ApiResult<T> {
 
     /**
@@ -27,7 +27,7 @@ public class ApiResult<T> {
     /**
      * 当前状态的描述说明信息
      */
-    private String msg;
+    private String desc;
 
     /**
      * 真正的响应数据
@@ -37,27 +37,27 @@ public class ApiResult<T> {
      * 请求的时间戳
      */
     @Builder.Default
-    private Long utc8 = System.currentTimeMillis();
+    private final long time = System.currentTimeMillis();
 
     /**
      * 接口处理耗时
      */
-    private Long cost;
+    private long cost;
 
-    public static <T> ApiResult<T> fail(String msg) {
-        return fail(ApiCode.ERROR, msg);
+    public static <T> ApiResult<T> fail(String desc) {
+        return fail(ApiCode.ERROR, desc);
     }
 
-    public static <T> ApiResult<T> fail(String code, String msg) {
-        return ApiResult.<T>builder().code(code).msg(msg).build();
+    public static <T> ApiResult<T> fail(String code, String desc) {
+        return ApiResult.<T>builder().code(code).desc(desc).build();
     }
 
     public static <T> ApiResult<T> fail(ApiCode code) {
-        return ApiResult.<T>builder().code(code.getCode()).msg(code.getMsg()).build();
+        return ApiResult.<T>builder().code(code.getCode()).desc(code.getMsg()).build();
     }
 
-    public static <T> ApiResult<T> fail(ApiCode code, String msg) {
-        return ApiResult.<T>builder().code(code.getCode()).msg(msg).build();
+    public static <T> ApiResult<T> fail(ApiCode code, String desc) {
+        return ApiResult.<T>builder().code(code.getCode()).desc(desc).build();
     }
 
     public static <T> ApiResult<T> ok() {
@@ -65,6 +65,6 @@ public class ApiResult<T> {
     }
 
     public static <T> ApiResult<T> ok(T data) {
-        return ApiResult.<T>builder().code(ApiCode.OK.getCode()).msg(ApiCode.OK.getMsg()).data(data).build();
+        return ApiResult.<T>builder().code(ApiCode.OK.getCode()).desc(ApiCode.OK.getMsg()).data(data).build();
     }
 }

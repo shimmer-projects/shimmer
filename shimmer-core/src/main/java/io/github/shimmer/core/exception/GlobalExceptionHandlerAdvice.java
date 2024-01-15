@@ -90,7 +90,7 @@ public class GlobalExceptionHandlerAdvice {
                 .builder()
                 .code(ApiCode.INVALID.getCode())
                 .data(validErrors)
-                .msg("请求参数校验失败")
+                .desc("请求参数校验失败")
                 .build();
     }
 
@@ -120,7 +120,7 @@ public class GlobalExceptionHandlerAdvice {
                 .builder()
                 .code(ApiCode.INVALID.getCode())
                 .data(validErrors)
-                .msg("请求参数校验失败")
+                .desc("请求参数校验失败")
                 .build();
     }
 

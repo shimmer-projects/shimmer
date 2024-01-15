@@ -25,6 +25,6 @@ public class NotFoundErrorController implements ErrorController {
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public Object error(HttpServletRequest request) {
-        return ApiResult.builder().code(ApiCode.ERROR.getCode()).msg("Page Not Found").build();
+        return ApiResult.builder().code(ApiCode.ERROR.getCode()).desc("Page Not Found").build();
     }
 }

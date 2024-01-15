@@ -125,8 +125,8 @@ public class NotVoidResponseBodyAdvice extends AbstractCostResponseBodyAdvice {
         log.debug("完成结果值封装");
         return ApiResult.builder()
                 .code(ApiCode.OK.getCode())
-                .msg("success")
-                .utc8(System.currentTimeMillis())
+                .desc("success")
+                .time(System.currentTimeMillis())
                 .data(body)
                 .build();
     }
