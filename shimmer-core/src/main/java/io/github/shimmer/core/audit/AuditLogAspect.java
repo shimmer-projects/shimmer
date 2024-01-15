@@ -41,7 +41,7 @@ public class AuditLogAspect {
     @Resource
     private ApplicationContext applicationContext;
 
-    @Value("${shimmer.core.audit.enable-global}")
+    @Value("${shimmer.core.audit.enable-global:true}")
     private boolean enableGlobal;
 
 
@@ -70,9 +70,7 @@ public class AuditLogAspect {
      */
     @Around("annotationPointCut()")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
-        System.out.println("around");
         Object proceed = joinPoint.proceed(joinPoint.getArgs());
-        System.out.println("around2");
         return proceed;
     }
 
