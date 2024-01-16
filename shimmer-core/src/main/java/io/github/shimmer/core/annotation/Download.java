@@ -66,12 +66,14 @@ public @interface Download {
     @AliasFor(annotation = RequestMapping.class)
     String[] path() default {};
 
+
+    @AliasFor(annotation = Operation.class, attribute = "description")
+    String description() default "";
+
     /**
      * 同RequestMapping
      */
     @AliasFor(annotation = RequestMapping.class, attribute = "produces")
     String[] produces() default {};
 
-    @AliasFor(annotation = Operation.class, attribute = "description")
-    String description() default "";
 }
