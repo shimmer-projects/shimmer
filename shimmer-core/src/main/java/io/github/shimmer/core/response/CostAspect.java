@@ -25,6 +25,12 @@ public class CostAspect {
             "|| @annotation(org.springframework.web.bind.annotation.PutMapping) " +
             "|| @annotation(org.springframework.web.bind.annotation.DeleteMapping) " +
             "|| @annotation(org.springframework.web.bind.annotation.PatchMapping) " +
+            "|| @annotation(io.github.shimmer.core.annotation.Get) " +
+            "|| @annotation(io.github.shimmer.core.annotation.Put) " +
+            "|| @annotation(io.github.shimmer.core.annotation.Post) " +
+            "|| @annotation(io.github.shimmer.core.annotation.Delete) " +
+            "|| @annotation(io.github.shimmer.core.annotation.Download) " +
+            "|| @annotation(io.github.shimmer.core.annotation.Upload) " +
             "|| @annotation(org.springframework.web.bind.annotation.PostMapping) ")
     public void pointcut() {
     }
@@ -50,6 +56,7 @@ public class CostAspect {
 
 
     public long cost() {
+        // TODO 访问 user/fetch接口的时候，这里抛出异常，需要处理。
         long cost = completionTime.get() - accessTime.get();
         completionTime.remove();
         accessTime.remove();

@@ -46,20 +46,6 @@ public class AuditLogAspect {
 
 
     /**
-     * 声明切点， 拦截所有请求，通过拦截 RequestMapping 等注解实现
-     */
-    @Pointcut("@annotation(org.springframework.web.bind.annotation.RequestMapping) " +
-            "|| @annotation(org.springframework.web.bind.annotation.GetMapping) " +
-            "|| @annotation(org.springframework.web.bind.annotation.PutMapping) " +
-            "|| @annotation(org.springframework.web.bind.annotation.DeleteMapping) " +
-            "|| @annotation(org.springframework.web.bind.annotation.PatchMapping) " +
-            "|| @annotation(org.springframework.web.bind.annotation.PostMapping) " +
-            "|| @annotation(io.github.shimmer.core.audit.AuditLog) "
-    )
-    public void annotationPointCut() {
-    }
-
-    /**
      * spring aop 一共定义了 五个切入点， Around Before AfterReturning AfterThrowing After
      * 执行顺序 如下：
      * Around -> Before -> (ProceedingJoinPoint.proceed()) -> AfterReturning(AfterThrowing) -> After -> Around
@@ -72,6 +58,26 @@ public class AuditLogAspect {
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
         Object proceed = joinPoint.proceed(joinPoint.getArgs());
         return proceed;
+    }
+
+    /**
+     * 声明切点， 拦截所有请求，通过拦截 RequestMapping 等注解实现
+     */
+    @Pointcut("@annotation(org.springframework.web.bind.annotation.RequestMapping) " +
+            "|| @annotation(org.springframework.web.bind.annotation.GetMapping) " +
+            "|| @annotation(org.springframework.web.bind.annotation.PutMapping) " +
+            "|| @annotation(org.springframework.web.bind.annotation.DeleteMapping) " +
+            "|| @annotation(org.springframework.web.bind.annotation.PatchMapping) " +
+            "|| @annotation(org.springframework.web.bind.annotation.PostMapping) " +
+            "|| @annotation(io.github.shimmer.core.annotation.Get) " +
+            "|| @annotation(io.github.shimmer.core.annotation.Put) " +
+            "|| @annotation(io.github.shimmer.core.annotation.Post) " +
+            "|| @annotation(io.github.shimmer.core.annotation.Delete) " +
+            "|| @annotation(io.github.shimmer.core.annotation.Download) " +
+            "|| @annotation(io.github.shimmer.core.annotation.Upload) " +
+            "|| @annotation(io.github.shimmer.core.audit.AuditLog) "
+    )
+    public void annotationPointCut() {
     }
 
     /**
@@ -130,7 +136,6 @@ public class AuditLogAspect {
 
 
         long finishTime = System.currentTimeMillis();
-        Long startTime = this.startTime.get();
 
         Result result = success ? Result.SUCCESS : Result.FAIL;
 
@@ -164,7 +169,7 @@ public class AuditLogAspect {
                         path,
                         clientIp,
                         log,
-                        finishTime - startTime,
+                        finishTime - startTime.get(),
                         finishTime,
                         result
                 );
@@ -181,7 +186,7 @@ public class AuditLogAspect {
                         path,
                         clientIp,
                         "默认日志",
-                        finishTime - startTime,
+                        finishTime - startTime.get(),
                         finishTime,
                         result
                 );
