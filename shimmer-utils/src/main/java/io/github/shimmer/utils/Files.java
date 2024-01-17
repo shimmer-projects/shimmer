@@ -1,6 +1,11 @@
 package io.github.shimmer.utils;
 
 
+import jakarta.activation.MimetypesFileTypeMap;
+
+import java.io.File;
+import java.io.IOException;
+
 /**
  * 文件操作工具类
  * <br/>
@@ -8,5 +13,22 @@ package io.github.shimmer.utils;
  *
  * @author yu_haiyang
  */
-public class Files {
+public class Files extends Nullables<File> {
+
+    Files(File file) {
+        super(file);
+    }
+
+    public Strings contentType() {
+        String contentType = null;
+        try {
+            contentType = java.nio.file.Files.probeContentType(source.toPath());
+        } catch (IOException ignore) {
+        }
+        if (Utils.useString(contentType).isBlank()) {
+            contentType = new MimetypesFileTypeMap().getContentType(source);
+        }
+        return Utils.useString(contentType);
+    }
+
 }

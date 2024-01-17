@@ -1,5 +1,6 @@
 package io.github.shimmer.utils;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -56,8 +57,8 @@ public final class Utils {
         return new Nullables<>(obj);
     }
 
-    public static Files useFile() {
-        return new Files();
+    public static Files useFile(File file) {
+        return new Files(file);
     }
 
     public static Base64s useBase64(String str) {
