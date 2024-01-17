@@ -1,5 +1,6 @@
 package io.github.shimmer.core.exception;
 
+import io.github.shimmer.core.download.DownloadTransferException;
 import io.github.shimmer.core.exception.annotation.ExceptionMapper;
 import io.github.shimmer.core.response.StringToApiResult;
 import io.github.shimmer.core.response.data.ApiCode;
@@ -7,12 +8,14 @@ import io.github.shimmer.core.response.data.ApiResult;
 import io.github.shimmer.utils.Utils;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.*;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.validation.BindException;
@@ -29,7 +32,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -63,6 +68,32 @@ public class GlobalExceptionHandlerAdvice {
     public ApiResult<Object> stringToApiResult(StringToApiResult result) {
         return result.getApiResult();
     }
+
+    @ExceptionHandler(DownloadTransferException.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    @SneakyThrows
+    public ResponseEntity<InputStreamResource> download(DownloadTransferException downloadTransfer) {
+        File transferFile = downloadTransfer.getFile();
+        //预下载文件
+        FileSystemResource file = new FileSystemResource(transferFile);
+        String filename = downloadTransfer.getFilename();
+        HttpHeaders httpHeaders = new HttpHeaders();
+        //指定下载后的文件名等，new String(filename.getBytes("UTF-8"),"ISO8859-1")很重要，不然会下载中文名的时候名字为空
+        String contentDisposition = ContentDisposition.attachment().filename(filename, StandardCharsets.UTF_8)
+                .build().toString();
+        httpHeaders.add(HttpHeaders.CONTENT_DISPOSITION, contentDisposition);
+        /* 设置该请求头后,js能够获取content-disposition请求头数据,从中获取文件名称 */
+        httpHeaders.add(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, "Content-Disposition");
+        // 获取文件的content-type
+        String contentType = Utils.useFile(transferFile).contentType().finish();
+        return ResponseEntity.ok()
+                .headers(httpHeaders)
+                .contentLength(file.contentLength())
+                .contentType(MediaType.parseMediaType(contentType))
+                .body(new InputStreamResource(file.getInputStream()));
+    }
+
     /**
      * <p>
      * 参数校验异常

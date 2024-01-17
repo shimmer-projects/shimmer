@@ -74,4 +74,18 @@ public @interface Download {
     @AliasFor(annotation = RequestMapping.class, attribute = "produces")
     String[] produces() default {};
 
+    /**
+     * 等待下载的文件路径
+     * 路径支持以下几种前缀，classpath:, file:, http(s):, store:
+     * classpath： 为项目中的resources下
+     * file: 本地文件路径
+     * http(s): 网络请求路径
+     * store: 下载我们filestore中的内容
+     */
+    String source() default "";
+
+    /**
+     * 自定义文件名称，如果接口返回的是InputStream的情况下，该值必须指定，否则没有办法知道该文件以什么类型导出，而且一定药包含后缀
+     */
+    String filename() default "";
 }
