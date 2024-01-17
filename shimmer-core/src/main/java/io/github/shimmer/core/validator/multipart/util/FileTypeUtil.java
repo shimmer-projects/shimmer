@@ -194,7 +194,7 @@ public class FileTypeUtil {
      */
     public static String getTypeByFileStreamHexHead(String fileStreamHexHead) {
         for (Map.Entry<String, String> fileTypeEntry : FILE_TYPE_MAP.entrySet()) {
-            if (Utils.useString(fileStreamHexHead).startsWith(fileTypeEntry.getKey())) {
+            if (Utils.useString(fileStreamHexHead).startsWithAny(fileTypeEntry.getKey())) {
                 return fileTypeEntry.getValue();
             }
         }

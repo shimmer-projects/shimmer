@@ -28,6 +28,9 @@ public class Files extends Nullables<File> {
         if (Utils.useString(contentType).isBlank()) {
             contentType = new MimetypesFileTypeMap().getContentType(source);
         }
+        if (Utils.useString(contentType).isBlank()) {
+            contentType = "application/octet-stream";
+        }
         return Utils.useString(contentType);
     }
 

@@ -63,4 +63,16 @@ public enum FileType {
         this.suffix = suffix;
         this.contentType = contentType;
     }
+
+    public static FileType findFileTypeWithContentType(String type) {
+        for (FileType value : FileType.values()) {
+            String[] contentType1 = value.getContentType();
+            for (String s : contentType1) {
+                if (s.equals(type)) {
+                    return value;
+                }
+            }
+        }
+        return null;
+    }
 }

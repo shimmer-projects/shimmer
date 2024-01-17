@@ -199,21 +199,41 @@ public class Strings extends Nullables<String> {
         }
     }
 
-    public boolean startsWith(String prefix) {
-        return isNotNull() && source.startsWith(prefix);
+    public boolean startsWithAny(String... prefix) {
+        return startsWithAny(false, prefix);
     }
 
-    public boolean startsWith(String prefix, boolean ignoreCase) {
-        return isNotNull() && source.toLowerCase().startsWith(prefix.toLowerCase());
+    public boolean startsWithAny(boolean ignoreCase, String... prefix) {
+        if (isNotNull()) {
+            String sourceFinal = ignoreCase ? source.toLowerCase() : source;
+            for (String pre : prefix) {
+                String prefixFinal = ignoreCase ? pre.toLowerCase() : pre;
+                if (sourceFinal.startsWith(prefixFinal)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
-    public boolean endsWith(String suffix) {
-        return isNotNull() && source.endsWith(suffix);
+
+    public boolean endsWithAny(String... suffix) {
+        return endsWithAny(false, suffix);
     }
 
-    public boolean endsWith(String suffix, boolean ignoreCase) {
-        return isNotNull() && source.toLowerCase().endsWith(suffix.toLowerCase());
+    public boolean endsWithAny(boolean ignoreCase, String... suffix) {
+        if (isNotNull()) {
+            String sourceFinal = ignoreCase ? source.toLowerCase() : source;
+            for (String pre : suffix) {
+                String suffixFinal = ignoreCase ? pre.toLowerCase() : pre;
+                if (sourceFinal.endsWith(suffixFinal)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
+
 
     /**
      * 切片
