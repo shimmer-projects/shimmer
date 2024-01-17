@@ -44,22 +44,6 @@ public class AuditLogAspect {
     @Value("${shimmer.core.audit.enable-global:true}")
     private boolean enableGlobal;
 
-
-    /**
-     * spring aop 一共定义了 五个切入点， Around Before AfterReturning AfterThrowing After
-     * 执行顺序 如下：
-     * Around -> Before -> (ProceedingJoinPoint.proceed()) -> AfterReturning(AfterThrowing) -> After -> Around
-     *
-     * @param joinPoint 接入点
-     * @return 响应
-     * @throws Throwable 业务中的未知异常
-     */
-    @Around("annotationPointCut()")
-    public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
-        Object proceed = joinPoint.proceed(joinPoint.getArgs());
-        return proceed;
-    }
-
     /**
      * 声明切点， 拦截所有请求，通过拦截 RequestMapping 等注解实现
      */
@@ -78,6 +62,22 @@ public class AuditLogAspect {
             "|| @annotation(io.github.shimmer.core.audit.AuditLog) "
     )
     public void annotationPointCut() {
+    }
+
+
+    /**
+     * spring aop 一共定义了 五个切入点， Around Before AfterReturning AfterThrowing After
+     * 执行顺序 如下：
+     * Around -> Before -> (ProceedingJoinPoint.proceed()) -> AfterReturning(AfterThrowing) -> After -> Around
+     *
+     * @param joinPoint 接入点
+     * @return 响应
+     * @throws Throwable 业务中的未知异常
+     */
+    @Around("annotationPointCut()")
+    public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
+        Object proceed = joinPoint.proceed(joinPoint.getArgs());
+        return proceed;
     }
 
     /**
