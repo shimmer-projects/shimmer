@@ -63,6 +63,7 @@
         <knife4j.version>4.3.0</knife4j.version>
         <mysql.version>8.2.0</mysql.version>
         <json-flattener.version>0.16.6</json-flattener.version>
+        <oshi.version>6.4.11</oshi.version>
 
         <!--  开发者工具  -->
         <mapstruct.version>1.5.5.Final</mapstruct.version>
@@ -123,6 +124,11 @@
                 <groupId>org.mapstruct</groupId>
                 <artifactId>mapstruct-processor</artifactId>
                 <version>${mapstruct.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.oshi</groupId>
+                <artifactId>oshi-core</artifactId>
+                <version>${oshi.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
