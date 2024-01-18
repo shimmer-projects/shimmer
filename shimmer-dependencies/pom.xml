@@ -46,6 +46,11 @@
             </dependency>
             <dependency>
                 <groupId>io.github.shimmer-projects</groupId>
+                <artifactId>shimmer-filestore</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.shimmer-projects</groupId>
                 <artifactId>shimmer-runner</artifactId>
                 <version>${project.parent.version}</version>
             </dependency>
