@@ -51,7 +51,7 @@ public class ServerInfoService {
                 .address(hostAddress)
                 .hostname(hostName)
                 .userDir(env.getProperty("user.dir"))
-                .bootTime(System.currentTimeMillis() - os.getSystemUptime() * 1000)
+                .bootTime(os.getSystemBootTime() * 1000)
                 .upTime(os.getSystemUptime())
                 .build();
 
