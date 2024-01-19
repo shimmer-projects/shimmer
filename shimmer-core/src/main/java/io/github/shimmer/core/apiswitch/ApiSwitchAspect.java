@@ -33,6 +33,7 @@ public class ApiSwitchAspect {
     @Around(value = "api(apiSwitch)", argNames = "pjp,apiSwitch")
     public Object ctl(ProceedingJoinPoint pjp, ApiSwitch apiSwitch) throws Throwable {
 
+        Object proceed = pjp.proceed();
         // 对应接口开关的key
         String key = apiSwitch.key();
 
@@ -49,12 +50,12 @@ public class ApiSwitchAspect {
                 Method method = signature.getMethod();
                 Class<?> returnType = method.getReturnType();
                 Method fallbackMethod = clazz.getDeclaredMethod(fallback);
-                Object invoke = fallbackMethod.invoke(pjp.getTarget());
+                proceed = fallbackMethod.invoke(pjp.getTarget());
                 if (returnType.isAssignableFrom(fallbackMethod.getReturnType())) {
-                    return invoke;
+                    return proceed;
                 }
-                if (Utils.useNullables(invoke).isNotNull()) {
-                    desc = invoke.toString();
+                if (Utils.useNullables(proceed).isNotNull()) {
+                    desc = proceed.toString();
                 }
             }
             throw new ApiSwitchException(desc);
