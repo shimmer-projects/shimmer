@@ -56,7 +56,6 @@ public class CostAspect {
 
 
     public long cost() {
-        // TODO 访问 user/fetch接口的时候，这里抛出异常，需要处理。
         long cost = completionTime.get() - accessTime.get();
         completionTime.remove();
         accessTime.remove();
