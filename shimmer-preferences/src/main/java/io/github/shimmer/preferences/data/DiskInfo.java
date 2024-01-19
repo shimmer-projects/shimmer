@@ -3,6 +3,7 @@ package io.github.shimmer.preferences.data;
 import io.github.shimmer.core.jackson.serializer.ByteHumanReadable;
 import lombok.Builder;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.util.List;
 
@@ -39,6 +40,7 @@ public class DiskInfo {
 
     @Data
     @Builder
+    @Accessors(chain = true)
     public static class Partition {
 
         /**

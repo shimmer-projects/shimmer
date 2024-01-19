@@ -2,6 +2,7 @@ package io.github.shimmer.preferences.data;
 
 import io.github.shimmer.core.jackson.serializer.ByteHumanReadable;
 import io.github.shimmer.core.jackson.serializer.LongToDate;
+import io.github.shimmer.core.jackson.serializer.TimeIntervalHumanReadable;
 import lombok.Builder;
 import lombok.Data;
 
@@ -38,6 +39,7 @@ public class JvmInfo {
     /**
      * 启动时长
      */
+    @TimeIntervalHumanReadable(millisecond = true)
     private long upTime;
 
     /**
@@ -54,5 +56,10 @@ public class JvmInfo {
      * java home
      */
     private String javaHome;
+
+    /**
+     * 用户目录
+     */
+    private String userDir;
 
 }

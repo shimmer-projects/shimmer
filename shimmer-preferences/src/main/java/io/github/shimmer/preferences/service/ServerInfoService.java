@@ -50,8 +50,7 @@ public class ServerInfoService {
                 .osArch(env.getProperty("os.arch"))
                 .address(hostAddress)
                 .hostname(hostName)
-                .userDir(env.getProperty("user.dir"))
-                .bootTime(os.getSystemBootTime() * 1000)
+                .bootTime(os.getSystemBootTime())
                 .upTime(os.getSystemUptime())
                 .build();
 
@@ -115,8 +114,7 @@ public class ServerInfoService {
         // 硬盘信息
         List<HWDiskStore> diskStores = hal.getDiskStores();
 
-        // 磁盘信息 可与 diskStores 配合出更加详细的信息
-        // 磁盘名称， uuid, total useable free fsType
+        // 磁盘信息
         List<OSFileStore> fileStores = os.getFileSystem().getFileStores();
         Map<String, DiskInfo.Partition> partitionMap = fileStores.stream().map(fs -> DiskInfo.Partition.builder()
                         .uuid(fs.getUUID())
@@ -129,19 +127,14 @@ public class ServerInfoService {
                 .collect(Collectors.toMap(DiskInfo.Partition::getUuid, t -> t));
         List<DiskInfo> diskInfos = diskStores.stream().map(hds -> {
             List<DiskInfo.Partition> partitions = hds.getPartitions().stream()
-                    .map(partition -> {
-                        DiskInfo.Partition p = partitionMap.get(partition.getUuid());
-                        p.setPartitionType(partition.getType());
-                        return p;
-                    })
-                    .collect(Collectors.toList());
-            DiskInfo diskInfo = DiskInfo.builder()
+                    .map(partition -> partitionMap.get(partition.getUuid()).setPartitionType(partition.getType()))
+                    .toList();
+            return DiskInfo.builder()
                     .model(hds.getModel())
                     .serial(hds.getSerial())
                     .size(hds.getSize())
                     .partitions(partitions)
                     .build();
-            return diskInfo;
         }).toList();
 
         // JVM 信息
@@ -156,6 +149,7 @@ public class ServerInfoService {
                 .vmName(runtimeMXBean.getVmName())
                 .javaVersion(env.getProperty("java.version"))
                 .javaHome(env.getProperty("java.home"))
+                .userDir(env.getProperty("user.dir"))
                 .build();
 
         return ServerInfo.builder()

@@ -1,6 +1,7 @@
 package io.github.shimmer.preferences.data;
 
 import io.github.shimmer.core.jackson.serializer.LongToDate;
+import io.github.shimmer.core.jackson.serializer.TimeIntervalHumanReadable;
 import lombok.Builder;
 import lombok.Data;
 
@@ -51,10 +52,6 @@ public class ComputerInfo {
     /**
      * 运行时长, 单位：秒
      */
+    @TimeIntervalHumanReadable(millisecond = false)
     private long upTime;
-
-    /**
-     * 用户目录
-     */
-    private String userDir;
 }
