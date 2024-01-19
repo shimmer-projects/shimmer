@@ -287,7 +287,6 @@ public class GlobalExceptionHandlerAdvice {
      * 处理所有未知的异常,也就是未在上面罗列出来的异常。
      */
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
     public ResponseEntity<ApiResult<Object>> handleGlobalException(Throwable throwable) {
         if (printExceptionInGlobalAdvice) {
@@ -302,11 +301,11 @@ public class GlobalExceptionHandlerAdvice {
             //异常提示可替换+抛出来的异常有自定义的异常信息
             if (msgReplaceable) {
                 String throwableMessage = throwable.getMessage();
-                if (Utils.useNullables(throwableMessage).isNotNull()) {
+                if (Utils.useString(throwableMessage).isNotEmpty()) {
                     message = throwableMessage;
                 }
             }
-            ApiResult<Object> res = ApiResult.fail(exceptionMapper.code(), message);
+            ApiResult<Object> res = ApiResult.builder().code(exceptionMapper.code()).desc(message).build();
             return ResponseEntity.status(exceptionMapper.httpStatus()).body(res);
 
         }
