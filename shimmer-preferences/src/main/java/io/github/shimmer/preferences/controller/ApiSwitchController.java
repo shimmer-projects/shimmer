@@ -1,9 +1,9 @@
 package io.github.shimmer.preferences.controller;
 
+import io.github.shimmer.core.annotation.Get;
 import io.github.shimmer.core.apiswitch.ApiSwitch;
 import io.github.shimmer.core.apiswitch.SwitchResolver;
 import jakarta.annotation.Resource;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,19 +23,19 @@ public class ApiSwitchController {
     @Resource
     private SwitchResolver resolver;
 
-    @GetMapping("/onoff/{state}")
-    public Object onoff(String key, @PathVariable("state") Integer state) {
+    @Get(path = "/onoff/{state}")
+    public String onoff(String key, @PathVariable("state") Integer state) {
         resolver.config(key, state);
         return "success";
     }
 
-    @GetMapping("/q1")
-    @ApiSwitch(key = "swtich$q1", resolver = "redisResolver")
+    @Get(path = "/q1")
+    @ApiSwitch(key = "swtich$q1")
     public Map<String, Object> q1() {
         return Map.of("a", "b", "c", "d");
     }
 
-    public String q1_fallback() {
-        return "接口维护中";
+    public Object q1_fallback() {
+        return "我就是不一样";
     }
 }
