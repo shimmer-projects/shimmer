@@ -61,13 +61,21 @@ public class DownloadAdvice {
                 HttpResponse<InputStream> send = HttpClient.newHttpClient().send(request, bodyHandler);
                 InputStream body = send.body();
                 String s = send.headers().firstValue("content-type").orElse("");
+                String suffix = null;
                 FileType fileTypeWithContentType = FileType.findFileTypeWithContentType(s);
                 if (Utils.useNullables(fileTypeWithContentType).isNotNull()) {
-                    file = File.createTempFile("tmp", fileTypeWithContentType.getSuffix()[0]);
-                } else {
-                    file = File.createTempFile("tmp", ".tmp");
+                    suffix = fileTypeWithContentType == null ? null : fileTypeWithContentType.getSuffix()[0];
+
                 }
+                if (Utils.useNullables(suffix).isNull()) {
+                    String path = uri.getPath();
+                    suffix = path.substring(path.lastIndexOf("."));
+                }
+                suffix = Utils.useNullables(suffix).isNull() ? ".tmp" : suffix;
+
+                file = File.createTempFile("tmp", suffix);
                 body.transferTo(new FileOutputStream(file));
+                body.close();
             } else {
                 file = ResourceUtils.getFile(source);
             }
