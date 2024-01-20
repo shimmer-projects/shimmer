@@ -72,3 +72,6 @@ shimmer:
     no-response-wrapper-packages:
       - org.springdoc.**
     print-exception-in-global-advice: true
+    audit:
+      enabled: true
+      enable-global: true
