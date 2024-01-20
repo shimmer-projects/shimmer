@@ -30,12 +30,12 @@ public class ApiSwitchController {
     }
 
     @Get(path = "/q1")
-    @ApiSwitch(key = "swtich$q1")
+    @ApiSwitch(key = "swtich$q1", fallback = "q1_fallback")
     public Map<String, Object> q1() {
         return Map.of("a", "b", "c", "d");
     }
 
-    public Object q1_fallback() {
-        return "我就是不一样";
+    public Map<String, Object> q1_fallback() {
+        return Map.of("n", "m");
     }
 }
