@@ -50,7 +50,7 @@ public class ServerInfoService {
                 .osArch(env.getProperty("os.arch"))
                 .address(hostAddress)
                 .hostname(hostName)
-                .bootTime(os.getSystemBootTime())
+                .bootTime(os.getSystemBootTime() * 1000)
                 .upTime(os.getSystemUptime())
                 .build();
 
