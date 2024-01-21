@@ -39,6 +39,10 @@
         </dependency>
         <dependency>
             <groupId>io.github.shimmer-projects</groupId>
+            <artifactId>shimmer-filestore</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.shimmer-projects</groupId>
             <artifactId>shimmer-ui</artifactId>
         </dependency>
         <dependency>
