@@ -12,7 +12,7 @@ import java.lang.annotation.*;
 @Documented
 public @interface Like {
 
-    Mode value() default Mode.SURROUND;
+    Mode value() default Mode.ROUND;
 
     /**
      * 目标字段
@@ -33,6 +33,6 @@ public @interface Like {
         /**
          * 两侧环绕包含
          */
-        SURROUND
+        ROUND
     }
 }
