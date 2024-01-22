@@ -101,7 +101,6 @@ public @interface Exist {
 
         @Override
         public void initialize(Exist constraintAnnotation) {
-            ConstraintValidator.super.initialize(constraintAnnotation);
             this.exist = constraintAnnotation;
         }
 
