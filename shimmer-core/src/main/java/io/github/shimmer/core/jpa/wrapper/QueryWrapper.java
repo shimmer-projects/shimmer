@@ -319,7 +319,7 @@ public class QueryWrapper<T> extends AbstractWrapper<T> {
 
     public static class Wrapper<K> {
 
-        private Wrapper() {
+        public Wrapper() {
         }
 
         public QueryWrapper<K> build() {
@@ -553,6 +553,11 @@ public class QueryWrapper<T> extends AbstractWrapper<T> {
          */
         public Wrapper<K> orderBy(String fieldName, boolean desc) {
             orderBy.add(OrderBy.builder().isDesc(desc).property(fieldName).build());
+            return this;
+        }
+
+        public Wrapper<K> query(String field, Opt opt, Object value) {
+            queryFields.add(QueryField.builder().fieldName(field).operator(opt).value(value).build());
             return this;
         }
 

@@ -18,12 +18,12 @@ abstract class AbstractWrapper<T> implements Specification<T> {
     /**
      * 条件字段
      */
-    private final List<QueryField> queryFields;
+    private final transient List<QueryField> queryFields;
 
     /**
      * 排序字段
      */
-    private final List<OrderBy> orderBy;
+    private final transient List<OrderBy> orderBy;
 
     protected AbstractWrapper(List<QueryField> queryFields, List<OrderBy> orderBy) {
         this.queryFields = queryFields;
@@ -70,35 +70,31 @@ abstract class AbstractWrapper<T> implements Specification<T> {
      * TempPredicate 转换为 Predicate
      */
     private Predicate buildPredicate(Root<T> root, CriteriaBuilder criteriaBuilder, QueryField predicate) {
-        switch (predicate.getOperator()) {
-            case EQ:
-                return criteriaBuilder.equal(root.get(predicate.getFieldName()), predicate.getValue());
-            case NE:
-                return criteriaBuilder.notEqual(root.get(predicate.getFieldName()), predicate.getValue());
-            case GE:
-                return criteriaBuilder.ge(root.get(predicate.getFieldName()), (Number) predicate.getValue());
-            case GT:
-                return criteriaBuilder.gt(root.get(predicate.getFieldName()), (Number) predicate.getValue());
-            case LE:
-                return criteriaBuilder.le(root.get(predicate.getFieldName()), (Number) predicate.getValue());
-            case LT:
-                return criteriaBuilder.lt(root.get(predicate.getFieldName()), (Number) predicate.getValue());
-            case IN:
+
+        return switch (predicate.getOperator()) {
+            case EQ -> criteriaBuilder.equal(root.get(predicate.getFieldName()), predicate.getValue());
+            case NE -> criteriaBuilder.notEqual(root.get(predicate.getFieldName()), predicate.getValue());
+            case GE -> criteriaBuilder.ge(root.get(predicate.getFieldName()), (Number) predicate.getValue());
+            case GT -> criteriaBuilder.gt(root.get(predicate.getFieldName()), (Number) predicate.getValue());
+            case LE -> criteriaBuilder.le(root.get(predicate.getFieldName()), (Number) predicate.getValue());
+            case LT -> criteriaBuilder.lt(root.get(predicate.getFieldName()), (Number) predicate.getValue());
+            case IN -> {
                 CriteriaBuilder.In<Object> in = criteriaBuilder.in(root.get(predicate.getFieldName()));
                 Object[] objects = (Object[]) predicate.getValue();
                 for (Object obj : objects) {
                     in.value(obj);
                 }
-                return criteriaBuilder.and(in);
-            case NOT_IN:
-                return criteriaBuilder.not(root.get(predicate.getFieldName()).in(predicate.getValue()));
-            case LIKE:
-                return criteriaBuilder.like(root.get(predicate.getFieldName()), "" + predicate.getValue());
-            case IS_NULL:
-                return criteriaBuilder.isNull(root.get(predicate.getFieldName()));
-            case NOT_NULL:
-                return criteriaBuilder.isNotNull(root.get(predicate.getFieldName()));
-        }
-        return null;
+                yield criteriaBuilder.and(in);
+            }
+            case NOT_IN -> criteriaBuilder.not(root.get(predicate.getFieldName()).in(predicate.getValue()));
+            case LIKE -> criteriaBuilder.like(root.get(predicate.getFieldName()), "" + predicate.getValue());
+            case NOT_LIKE -> criteriaBuilder.notLike(root.get(predicate.getFieldName()), "" + predicate.getValue());
+            case BETWEEN -> {
+                Object[] value = (Object[]) predicate.getValue();
+                yield criteriaBuilder.between(root.get(predicate.getFieldName()), value[0].toString(), value[1].toString());
+            }
+            case IS_NULL -> criteriaBuilder.isNull(root.get(predicate.getFieldName()));
+            case NOT_NULL -> criteriaBuilder.isNotNull(root.get(predicate.getFieldName()));
+        };
     }
 }
