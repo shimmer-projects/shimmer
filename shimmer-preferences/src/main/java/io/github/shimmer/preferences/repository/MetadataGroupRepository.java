@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
  * @author yu_haiyang
  */
 @Repository
-public interface MetadataRepository extends BaseJpaRepository<MetadataGroupEntity, Long> {
+public interface MetadataGroupRepository extends BaseJpaRepository<MetadataGroupEntity, Long> {
 }

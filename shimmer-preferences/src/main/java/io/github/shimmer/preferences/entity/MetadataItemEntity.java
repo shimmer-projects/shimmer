@@ -18,7 +18,7 @@ import lombok.*;
 @AllArgsConstructor
 @ToString(callSuper = true)
 @Entity
-@Table(name = "metadata_item")
+@Table(name = "prefs_metadata_item")
 public class MetadataItemEntity extends BaseEntity<Long> {
 
     /**
@@ -38,4 +38,6 @@ public class MetadataItemEntity extends BaseEntity<Long> {
      * 对该项目的详细说明
      */
     private String remark;
+
+    private Long groupId;
 }

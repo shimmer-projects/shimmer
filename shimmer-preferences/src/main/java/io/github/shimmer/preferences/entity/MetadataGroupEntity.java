@@ -18,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @ToString(callSuper = true)
 @Entity
-@Table(name = "metadata_group")
+@Table(name = "prefs_metadata_group")
 public class MetadataGroupEntity extends BaseEntity<Long> {
 
     /**
@@ -37,8 +37,8 @@ public class MetadataGroupEntity extends BaseEntity<Long> {
      */
     private String remark;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "group_id", referencedColumnName = "id")
+    @OneToMany(mappedBy = "groupId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    @JoinColumn(name = "group_id", referencedColumnName = "id")
     @ToString.Exclude
     private List<MetadataItemEntity> items;
 }
