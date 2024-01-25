@@ -22,5 +22,9 @@
             <artifactId>shimmer-core</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.dromara.x-file-storage</groupId>
+            <artifactId>x-file-storage-core</artifactId>
+        </dependency>
     </dependencies>
 </project>
