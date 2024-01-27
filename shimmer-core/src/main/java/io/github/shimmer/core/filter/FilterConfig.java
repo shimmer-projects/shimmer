@@ -2,7 +2,6 @@ package io.github.shimmer.core.filter;
 
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 
 /**
@@ -11,7 +10,7 @@ import org.springframework.core.Ordered;
  *
  * @author yu_haiyang
  */
-@Configuration
+//@Configuration
 //@ServletComponentScan(value = {"io.github.shimmer.core.filter"})
 public class FilterConfig {
 
