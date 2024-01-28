@@ -4,6 +4,7 @@ import jakarta.persistence.criteria.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.NonNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -13,22 +14,121 @@ import java.util.Objects;
  *
  * @author yu_haiyang
  */
-abstract class AbstractWrapper<T> implements Specification<T> {
+class AbstractWrapper<T> implements Wrapper<T>, Specification<T> {
 
     /**
      * 条件字段
      */
-    private final transient List<QueryField> queryFields;
+    private final List<QueryField> queryFields;
 
     /**
      * 排序字段
      */
-    private final transient List<OrderBy> orderBy;
+    private final List<OrderBy> orderBy;
+
+    @Override
+    public Wrapper<T> eq(String fieldName, Object value) {
+        return query(fieldName, Opt.EQ, value);
+    }
+
+    @Override
+    public Wrapper<T> ne(String fieldName, Object value) {
+        return query(fieldName, Opt.NE, value);
+    }
+
+    @Override
+    public Wrapper<T> gt(String fieldName, Comparable<?> value) {
+        return query(fieldName, Opt.GT, value);
+    }
+
+    @Override
+    public Wrapper<T> ge(String fieldName, Comparable<?> value) {
+        return query(fieldName, Opt.GE, value);
+    }
+
+    @Override
+    public Wrapper<T> lt(String fieldName, Comparable<?> value) {
+        return query(fieldName, Opt.LT, value);
+    }
+
+    @Override
+    public Wrapper<T> le(String fieldName, Comparable<?> value) {
+        return query(fieldName, Opt.LE, value);
+    }
+
+    @Override
+    public Wrapper<T> like(String fieldName, String value) {
+        return query(fieldName, Opt.LIKE, "%" + value + "%");
+    }
+
+    @Override
+    public Wrapper<T> likeRight(String fieldName, String value) {
+        return query(fieldName, Opt.LIKE, value + "%");
+    }
+
+    @Override
+    public Wrapper<T> likeLeft(String fieldName, String value) {
+        return query(fieldName, Opt.LIKE, "%" + value);
+    }
+
+    @Override
+    public Wrapper<T> between(String fieldName, Object min, Object max) {
+        return query(fieldName, Opt.BETWEEN, new Object[]{min, max});
+    }
+
+    @Override
+    public Wrapper<T> in(String fieldName, Iterable<?> values) {
+        List<Object> valuesList = new ArrayList<>();
+        values.forEach(valuesList::add);
+        in(fieldName, valuesList.toArray());
+        return this;
+    }
+
+    @Override
+    public Wrapper<T> in(String fieldName, Object... values) {
+        return query(fieldName, Opt.IN, values);
+    }
+
+    @Override
+    public Wrapper<T> notIn(String fieldName, Object... values) {
+        return query(fieldName, Opt.NOT_IN, values);
+    }
+
+    @Override
+    public Wrapper<T> notIn(String fieldName, Iterable<?> values) {
+        List<Object> valuesList = new ArrayList<>();
+        values.forEach(valuesList::add);
+        notIn(fieldName, valuesList.toArray());
+        return this;
+    }
+
+    @Override
+    public Wrapper<T> isNull(String fieldName) {
+        return query(fieldName, Opt.IS_NULL, null);
+    }
+
+    @Override
+    public Wrapper<T> isNotNull(String fieldName) {
+        return query(fieldName, Opt.NOT_NULL, null);
+    }
+
+    @Override
+    public Wrapper<T> orderBy(String fieldName, boolean desc) {
+        orderBy.add(OrderBy.builder().isDesc(desc).property(fieldName).build());
+        return this;
+    }
+
+
+    protected Wrapper<T> query(String field, Opt opt, Object value) {
+        queryFields.add(QueryField.builder().fieldName(field).operator(opt).value(value).build());
+        return this;
+    }
 
     protected AbstractWrapper(List<QueryField> queryFields, List<OrderBy> orderBy) {
         this.queryFields = queryFields;
         this.orderBy = orderBy;
     }
+
 
     /**
      * @param root    得到查询的根，root.get(“变量名”)，根据变量名查询。

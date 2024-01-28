@@ -3,12 +3,14 @@ package io.github.shimmer.runner.controller;
 
 import io.github.shimmer.core.annotation.Download;
 import io.github.shimmer.core.annotation.Get;
+import io.github.shimmer.core.annotation.Upload;
 import io.github.shimmer.core.audit.AuditLog;
 import io.github.shimmer.core.audit.OperationType;
 import io.github.shimmer.core.debounce.LimitAccessException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileNotFoundException;
 import java.time.LocalDateTime;
@@ -37,5 +39,9 @@ public class IndexController {
     public void down() throws FileNotFoundException {
 //        return new File("D:\\技术\\personal\\AbstractQueuedSynchronizer.java");
 //        return new FileInputStream("D:\\技术\\personal\\Java魔法类：Unsafe应用解析.md");
+    }
+    @Upload(path = "upload")
+    public void upload(MultipartFile file) {
+        System.out.println();
     }
 }
