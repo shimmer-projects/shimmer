@@ -2,6 +2,9 @@ package io.github.shimmer.filestore.controller;
 
 import io.github.shimmer.core.annotation.Rest;
 import io.github.shimmer.core.annotation.Upload;
+import io.github.shimmer.filestore.entity.RealFileInfoEntity;
+import io.github.shimmer.filestore.service.RealFileInfoService;
+import jakarta.annotation.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -14,10 +17,12 @@ import org.springframework.web.multipart.MultipartFile;
 @Rest(path = "file", name = "文件管理")
 public class FileController {
 
+
+    @Resource
+    private RealFileInfoService realFileInfoService;
+
     @Upload(path = "upload")
-    public String uploadFile(MultipartFile file) {
-        System.out.println(file);
-        //file-store
-        return "success";
+    public RealFileInfoEntity uploadFile(MultipartFile file) {
+        return realFileInfoService.save(file);
     }
 }
