@@ -27,7 +27,6 @@
         <javax.servlet-api.version>4.0.1</javax.servlet-api.version>
         <jakarta.servlet-api.version>5.0.0</jakarta.servlet-api.version>
         <jsch.version>0.1.55</jsch.version>
-        <lombok.version>1.18.16</lombok.version>
         <minio.version>8.5.2</minio.version>
         <qiniu-java-sdk.version>7.12.1</qiniu-java-sdk.version>
         <sardine.version>5.10</sardine.version>
