@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * <p></p>
+ * <p>文件存储配置类</p>
  * Created on 2024-01-17 10:58
  *
  * @author yu_haiyang
@@ -410,9 +410,6 @@ public class FileStoreProperties {
 
     /**
      * FastDFS Storage
-     *
-     * @author XS <wanghaiqi@beeplay123.com>
-     * @date 2023/10/23
      */
     @Data
     @Accessors(chain = true)
