@@ -14,6 +14,7 @@
         <module>shimmer-authority</module>
         <module>shimmer-preferences</module>
         <module>shimmer-filestore</module>
+        <module>shimmer-dataway</module>
     </modules>
     <version>1.0.0-SNAPSHOT</version>
 
