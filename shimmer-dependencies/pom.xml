@@ -4,7 +4,7 @@
     <parent>
         <groupId>io.github.shimmer-projects</groupId>
         <artifactId>shimmer</artifactId>
-        <version>0.0.1-SNAPSHOTS</version>
+        <version>0.0.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>shimmer-dependencies</artifactId>
@@ -22,7 +22,7 @@
             <dependency>
                 <groupId>io.github.shimmer-projects</groupId>
                 <artifactId>shimmer-ui</artifactId>
-                <version>0.0.1-SNAPSHOTS</version>
+                <version>0.0.1-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>io.github.shimmer-projects</groupId>
