@@ -60,6 +60,6 @@ public class ApiSwitchAspect {
             }
             throw new ApiSwitchException(desc);
         }
-        return pjp.proceed();
+        return proceed;
     }
 }
