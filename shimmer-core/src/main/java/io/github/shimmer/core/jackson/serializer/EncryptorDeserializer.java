@@ -15,7 +15,7 @@ import java.util.Objects;
 /**
  * <pre>
  * 序列化注解自定义实现
- * JsonDeserializer<String>：指定String类型，deserialize()方法用于将修改后的数据载入
+ * {@code JsonDeserializer<String>}：指定String类型，deserialize()方法用于将修改后的数据载入
  * Jackson使用ContextualSerializer在序列化时获取字段注解的属性
  * </pre>
  * Created on 2024-01-31 15:56
