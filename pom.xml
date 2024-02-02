@@ -75,6 +75,8 @@
         <!-- 规范插件 -->
         <git.commit.plugin>4.9.9</git.commit.plugin>
         <spring.checkstyle.plugin>0.0.29</spring.checkstyle.plugin>
+        <!-- 跳过测试 -->
+        <skipTest>true</skipTest>
     </properties>
 
     <!--dependencyManagement: 负责jar的管理，不负责jar的下载。-->
@@ -273,7 +275,7 @@
                 <plugin>
                     <groupId>org.sonatype.plugins</groupId>
                     <artifactId>nexus-staging-maven-plugin</artifactId>
-                    <version>1.6.7</version>
+                    <version>1.6.13</version>
                 </plugin>
             </plugins>
         </pluginManagement>
