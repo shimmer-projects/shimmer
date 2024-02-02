@@ -22,7 +22,7 @@
             <dependency>
                 <groupId>io.github.shimmer-projects</groupId>
                 <artifactId>shimmer-ui</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
+                <version>${project.parent.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.github.shimmer-projects</groupId>
