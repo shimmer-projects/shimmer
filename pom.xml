@@ -139,6 +139,18 @@
                 <artifactId>javax.mail</artifactId>
                 <version>1.6.2</version>
             </dependency>
+            <!-- 加密工具 -->
+            <dependency>
+                <groupId>org.jasypt</groupId>
+                <artifactId>jasypt</artifactId>
+                <version>1.9.3</version>
+            </dependency>
+            <!-- poi 相关依赖-->
+            <dependency>
+                <groupId>com.deepoove</groupId>
+                <artifactId>poi-tl</artifactId>
+                <version>1.12.2</version>
+            </dependency>
             <dependency>
                 <groupId>org.dromara.x-file-storage</groupId>
                 <artifactId>x-file-storage-core</artifactId>
