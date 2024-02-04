@@ -1,0 +1,48 @@
+package ${module.packageName}.service;
+
+import ${module.packageName}.request.${model.modelName}Request;
+import ${module.packageName}.response.${model.modelName}Response;
+
+/**
+ * <p>${description}</p>
+ * Created on ${datetime}
+ *
+ * @author yuhaiyang
+ */
+public interface ${model.modelName}Service {
+
+
+    /**
+     * 新增
+     * @return 插入后的ID
+     */
+    Long insert(${model.modelName}Request request);
+
+    /**
+     * 根据组织的ID 删除该组织信息
+     * @param id 组织的ID
+     */
+    void delete(Long id);
+
+    /**
+     * 更新组织信息
+     * @param request 修改后的组织信息
+     */
+    void update(${model.modelName}Request request);
+
+    /**
+     * 根据组织的ID 查询该组织的详细信息
+     * @param id 组织ID
+     * @return 该组织的详细信息
+     */
+        ${model.modelName}Response detail(Long id);
+
+    /**
+     * 根据支持组织查询的字段进行对组织进行分页查询
+     * @param pager 请求的分页信息
+     * @param request 请求的查询信息
+     * @return 查询到的组织信息以及分页信息
+     */
+    Pager<${model.modelName}Response> fetch(Pager<${model.modelName}Response> pager, ${model.modelName}Request request);
+
+}

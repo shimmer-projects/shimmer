@@ -22,6 +22,7 @@
         <module>shimmer-preferences</module>
         <module>shimmer-filestore</module>
         <module>shimmer-dataway</module>
+        <module>shimmer-codegen</module>
     </modules>
 
     <!-- 许可证信息，这里是Apache 2.0的许可证，大家根据实际情况修改 -->
@@ -150,6 +151,11 @@
                 <groupId>com.deepoove</groupId>
                 <artifactId>poi-tl</artifactId>
                 <version>1.12.2</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.velocity.tools</groupId>
+                <artifactId>velocity-tools-generic</artifactId>
+                <version>3.1</version>
             </dependency>
             <dependency>
                 <groupId>org.dromara.x-file-storage</groupId>

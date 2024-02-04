@@ -1,0 +1,18 @@
+package ${module.packageName}.response;
+
+import lombok.Data;
+
+/**
+ * <p>${description}</p>
+ * Created on ${datetime}
+ *
+ * @author yuhaiyang
+ */
+@Data
+public class ${model.modelName}Response {
+
+    /**
+     * 主键
+     */
+    private Long id;
+}

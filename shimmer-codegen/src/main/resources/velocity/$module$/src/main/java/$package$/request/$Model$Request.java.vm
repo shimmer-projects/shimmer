@@ -1,0 +1,25 @@
+package ${module.packageName}.request;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
+
+/**
+ * <p>${description}</p>
+ * Created on ${datetime}
+ *
+ * @author yuhaiyang
+ */
+@Data
+@Schema(description = "组织信息")
+public class ${model.modelName}Request {
+
+    /**
+     * 主键
+     */
+    @Schema(description = "主键")
+    @DecimalMin(value = "1", message = "主键必须是大于0的数值", groups = {VG.U.class})
+    @NotNull(message = "主键不能为空", groups = {VG.U.class})
+    private Long id;
+}

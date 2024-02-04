@@ -1,0 +1,13 @@
+package ${module.packageName}.repository;
+
+import ${module.packageName}.entity.${model.modelName}Entity;
+
+/**
+ * <p>${description}</p>
+ * Created on ${datetime}
+ *
+ * @author yuhaiyang
+ */
+@Repository
+public interface ${model.modelName}Repository extends BaseJpaRepository<${model.modelName}Entity, Long> {
+}

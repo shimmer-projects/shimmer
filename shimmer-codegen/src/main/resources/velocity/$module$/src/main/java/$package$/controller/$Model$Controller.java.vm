@@ -1,0 +1,109 @@
+package ${module.packageName}.controller;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import jakarta.annotation.Resource;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotNull;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import ${module.packageName}.request.${model.modelName}Request;
+import ${module.packageName}.service.${model.modelName}Service;
+import ${module.packageName}.response.${model.modelName}Response;
+
+
+/**
+ * <p>${description}</p>
+ * Created on ${datetime}
+ *
+ * @author yuhaiyang
+ */
+@RestController
+@RestResource(path = "org", name = "组织管理", description = "${module.packageName}.organization.controller.${model.modelName}Controller")
+public class ${model.modelName}Controller {
+
+    @Resource
+    private ${model.modelName}Service ${model.modelName}Service;
+
+
+    /**
+     * 添加用户
+     *
+     * @param request 传递过来的用户基本信息
+     * @return 添加完之后的用户ID
+     */
+    @PostMapping(path = "/insert")
+    @Operation(summary = "用户新增接口", description = "用于添加用户，该接口需要登录后并拥有该接口的访问权限")
+    @Debounce
+    public ApiResult<Long> insert(
+            @Validated(VG.C.class) @RequestBody ${model.modelName}Request request) {
+        Long id = ${model.modelName}Service.insert(request);
+        return ApiResult.ok(id);
+    }
+
+
+    /**
+     * 根据用户的主键获取用户的信息
+     *
+     * @param id 用户的主键信息
+     * @return void
+     */
+    @DeleteMapping(path = "delete")
+    @Operation(summary = "用户删除接口", description = "根据用户ID进行对用户删除，该接口需要登录后并拥有该接口的访问权限")
+    public ApiResult<Long> delete(
+            @Validated
+            @NotNull(message = "用户ID不能为空")
+            @DecimalMin(value = "1", message = "用户ID不能小于1")
+            @Parameter(name = "id", description = "主键")
+            @RequestParam Long id) {
+            ${model.modelName}Service.delete(id);
+        return ApiResult.ok(id);
+    }
+
+
+    /**
+     * 用户修改
+     *
+     * @param request 修改后的用户信息
+     * @return void
+     */
+    @PutMapping(path = "update")
+    @Operation(summary = "修改用户接口", description = "根据用户ID进行对用户进行修改，该接口需要登录后并拥有该接口的访问权限")
+    public ApiResult<Long> update(
+            @Validated(VG.U.class) @RequestBody ${model.modelName}Request request) {
+            ${model.modelName}Service.update(request);
+        return ApiResult.ok();
+    }
+
+
+    /**
+     * 根据用户的主键获取用户的信息
+     *
+     * @param id 用户的主键信息
+     * @return 主键对应的用户详细信息
+     */
+    @GetMapping(path = "detail")
+    @Operation(summary = "查看用户详情", description = "根据用户ID查看用户的详细信息，该接口需要登录后并拥有该接口的访问权限")
+    public ApiResult<${model.modelName}Response> detail(@NotNull(message = "用户ID不能为空")
+                                                        @DecimalMin(value = "1", message = "用户ID不能小于1")
+                                                        @Parameter(name = "id", description = "主键")
+                                                        @RequestParam Long id) {
+            ${model.modelName}Response detail = ${model.modelName}Service.detail(id);
+        return ApiResult.ok(detail);
+    }
+
+
+    /**
+     * 根据条件获取用户列表
+     * 所有的条件注解属性的值为空的时候获取全量
+     *
+     * @param request 满足指定条件参数的用户信息
+     * @return 满足条件的所有用户并分页
+     */
+    @GetMapping(path = "fetch")
+    @Operation(summary = "用户列表条件查询", description = "根据支持的条件查询字段查看用户列表信息，该接口需要登录后并拥有该接口的访问权限")
+    public Pager<${model.modelName}Response> fetch(Pager<${model.modelName}Response> pager, ${model.modelName}Request request) {
+        Pager<${model.modelName}Response> fetch = ${model.modelName}Service.fetch(pager, request);
+        return fetch;
+    }
+}

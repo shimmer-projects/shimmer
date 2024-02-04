@@ -1,0 +1,37 @@
+package ${module.packageName}.entity;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+/**
+ * <p>${description}</p>
+ * Created on ${datetime}
+ *
+ * @author yuhaiyang
+ */
+@Getter
+@Setter
+@ToString(callSuper = true)
+@Entity
+    ##@Table(name = "sys_organization")
+public class ${model.modelName}Entity extends BaseEntity {
+
+
+    #foreach($column in $model.columns)
+        /**
+         * $column.comments
+         */
+        @Column(
+            #if(!$column.nullable)
+                    nullable = false,
+            #end
+                updatable = false,
+                unique = true,
+                insertable = true
+        )
+        private String $column.columnName;
+    #end
+
+}

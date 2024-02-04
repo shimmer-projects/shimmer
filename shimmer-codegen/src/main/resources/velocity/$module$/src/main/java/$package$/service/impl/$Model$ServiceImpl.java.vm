@@ -1,0 +1,71 @@
+package ${module.packageName}.service.impl;
+
+import jakarta.annotation.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
+import ${module.packageName}.entity.${model.modelName}Entity;
+import ${module.packageName}.request.${model.modelName}Request;
+import ${module.packageName}.mapper.${model.modelName}Mapper;
+import ${module.packageName}.repository.${model.modelName}Repository;
+import ${module.packageName}.service.${model.modelName}Service;
+import ${module.packageName}.response.${model.modelName}Response;
+
+import java.util.List;
+import java.util.Optional;
+
+/**
+ * <p>${description}</p>
+ * Created on ${datetime}
+ *
+ * @author yuhaiyang
+ */
+@Service
+public class ${model.modelName}ServiceImpl implements ${model.modelName}Service {
+
+    @Resource
+    private ${model.modelName}Repository ${model.modelName}Repository;
+
+    @Resource
+    private ${model.modelName}Mapper ${model.modelName}Mapper;
+
+    @Override
+    public Long insert(${model.modelName}Request request) {
+            ${model.modelName}Entity entity = ${model.modelName}Mapper.requestToEntity(request);
+        entity.setId(null);
+        entity = ${model.modelName}Repository.save(entity);
+        return entity.getId();
+    }
+
+    @Override
+    public void delete(Long id) {
+            ${model.modelName}Repository.deleteById(id);
+    }
+
+    @Override
+    public void update(${model.modelName}Request request) {
+            ${model.modelName}Entity entity = ${model.modelName}Repository.findById(request.getId()).orElseThrow();
+            ${model.modelName}Mapper.requestToEntity(entity, request);
+            ${model.modelName}Repository.save(entity);
+    }
+
+    @Override
+    public ${model.modelName}Response detail(Long id) {
+        Optional<${model.modelName}Entity> entityOptional = ${model.modelName}Repository.findById(id);
+            ${model.modelName}Entity entity = entityOptional.orElseThrow();
+            ${model.modelName}Response response = ${model.modelName}Mapper.entityToResponse(entity);
+        return response;
+    }
+
+    @Override
+    public Pager<${model.modelName}Response> fetch(Pager<${model.modelName}Response> pager, ${model.modelName}Request request) {
+        PageRequest page = PageRequest.of(pager.getPageNo() - 1, pager.getPageSize());
+            ${model.modelName}Entity entity = ${model.modelName}Mapper.requestToEntity(request);
+        Page<${model.modelName}Entity> entities = ${model.modelName}Repository.queryWithConditionEntity(entity, page);
+        List<${model.modelName}Response> responses = entities.stream().map(${model.modelName}Mapper::entityToResponse).toList();
+        pager.setPageCount(entities.getTotalPages());
+        pager.setRecordCount(entities.getTotalElements());
+        pager.setData(responses);
+        return pager;
+    }
+}

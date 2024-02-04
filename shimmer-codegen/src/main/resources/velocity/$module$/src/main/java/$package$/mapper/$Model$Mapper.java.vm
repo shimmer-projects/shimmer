@@ -1,0 +1,38 @@
+package ${module.packageName}.mapper;
+
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.Mappings;
+import ${module.packageName}.entity.${model.modelName}Entity;
+import ${module.packageName}.request.${model.modelName}Request;
+import ${module.packageName}.response.${model.modelName}Response;
+
+/**
+ * <p>${description}</p>
+ * Created on ${datetime}
+ *
+ * @author yuhaiyang
+ */
+@Mapper(componentModel = "META-INF/spring")
+public interface ${model.modelName}Mapper {
+
+    /**
+     * 将请求参数转换为 JPA 的数据库实体
+     * @param request 请求参数
+     * @return 数据库实体
+     */
+        ${model.modelName}Entity requestToEntity(${model.modelName}Request request);
+
+    @Mappings({
+            @Mapping(target = "pk", ignore = true)
+    })
+        ${model.modelName}Entity requestToEntity(@MappingTarget ${model.modelName}Entity entity, ${model.modelName}Request request);
+
+    /**
+     * 将数据库实体 转换为 用于前端展示的实体
+     * @param entity 数据库实体
+     * @return 给上游应用的响应信息
+     */
+
+        ${model.modelName}Response entityToResponse(${model.modelName}Entity entity);
+}
