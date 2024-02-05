@@ -6,6 +6,7 @@ import io.github.shimmer.core.annotation.Get;
 import io.github.shimmer.core.audit.AuditLog;
 import io.github.shimmer.core.audit.OperationType;
 import io.github.shimmer.core.debounce.LimitAccessException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +17,8 @@ import java.time.LocalDateTime;
 @RestController
 public class IndexController {
 
+    @Value("${shimmer.version}")
+    private String version;
     @Get(path = "hello")
     public String hello(@RequestParam String name) {
         return "Hello " + name;
@@ -37,5 +40,10 @@ public class IndexController {
     public void down() throws FileNotFoundException {
 //        return new File("D:\\技术\\personal\\AbstractQueuedSynchronizer.java");
 //        return new FileInputStream("D:\\技术\\personal\\Java魔法类：Unsafe应用解析.md");
+    }
+
+    @Get(path = "version")
+    public String version() {
+        return version;
     }
 }

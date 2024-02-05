@@ -68,6 +68,7 @@ knife4j:
     enable-document-manage: true
 
 shimmer:
+  version: @project.version@
   core:
     no-response-wrapper-packages:
       - org.springdoc.**

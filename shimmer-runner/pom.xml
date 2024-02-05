@@ -43,6 +43,10 @@
         </dependency>
         <dependency>
             <groupId>io.github.shimmer-projects</groupId>
+            <artifactId>shimmer-codegen</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.shimmer-projects</groupId>
             <artifactId>shimmer-ui</artifactId>
         </dependency>
         <dependency>
@@ -67,6 +71,12 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
