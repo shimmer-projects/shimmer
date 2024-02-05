@@ -77,7 +77,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             System.out.println("JWT validation succeeded! JwtClaims: " + jwtClaims);
             List<String> audience = jwtClaims.getAudience();
             String username = audience.get(0);
-            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) { // 表示用户还没有连通
+            if (username != null
+                // && SecurityContextHolder.getContext().getAuthentication() == null
+            ) { // 表示用户还没有连通
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 
 //                 if (jwtService.isToKenValid(jwt, userDetails)) {
