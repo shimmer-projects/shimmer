@@ -17,4 +17,9 @@ public class DatawayProperties {
      * 是否启用 dataway 模块
      */
     private boolean enabled = true;
+
+    /**
+     * 基础路径
+     */
+    private String basePath = "/api/";
 }
