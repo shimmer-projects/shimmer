@@ -120,7 +120,7 @@ spring:
     mode: HTML #模板
   jackson:
     # 设置属性命名策略,对应jackson下PropertyNamingStrategy中的常量值，SNAKE_CASE-返回的json驼峰式转下划线，json body下划线传到后端自动转驼峰式
-    property-naming-strategy: SNAKE_CASE
+    # property-naming-strategy: SNAKE_CASE
     # 全局设置@JsonFormat的格式pattern
     date-format: yyyy-MM-dd HH:mm:ss
     # 当地时区
