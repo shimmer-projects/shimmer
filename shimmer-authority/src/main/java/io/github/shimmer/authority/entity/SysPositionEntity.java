@@ -1,5 +1,6 @@
 package io.github.shimmer.authority.entity;
 
+import io.github.shimmer.core.jpa.condition.Like;
 import io.github.shimmer.core.jpa.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -25,18 +26,21 @@ public class SysPositionEntity extends BaseEntity<Long> {
      * 岗位名称
      */
     @Column(name = "position_name")
+    @Like
     private String positionName;
 
     /**
      * 岗位编码
      */
     @Column(name = "position_code")
+    @Like
     private String positionCode;
 
     /**
      * 备注信息
      */
     @Column(name = "remark")
+    @Like
     private String remark;
 
 
