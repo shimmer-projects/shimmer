@@ -78,13 +78,13 @@ public class SysUserServiceImpl implements SysUserService {
     }
 
     @Override
-    public Pager<SysUserResponse> fetch(Pager<SysUserResponse> pager, SysUserRequest request) {
-        PageRequest page = PageRequest.of(pager.getPageNo() - 1, pager.getPageSize());
+    public Pager fetch(Pager pager, SysUserRequest request) {
+        PageRequest page = PageRequest.of(pager.getCurrentPage() - 1, pager.getPageSize());
         SysUserEntity entity = sysUserMapper.requestToEntity(request);
         Page<SysUserEntity> entities = sysUserRepository.queryWithConditionEntity(entity, page);
         List<SysUserResponse> responses = entities.stream().map(sysUserMapper::entityToResponse).toList();
         pager.setPageCount(entities.getTotalPages());
-        pager.setRecordCount(entities.getTotalElements());
+        pager.setTotal(entities.getTotalElements());
         pager.setData(responses);
         return pager;
     }

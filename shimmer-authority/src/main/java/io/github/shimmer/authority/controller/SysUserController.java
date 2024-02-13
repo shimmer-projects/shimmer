@@ -41,7 +41,7 @@ public class SysUserController {
     @PostMapping(path = "/insert")
     @Operation(summary = "新增用户", description = "用于添加用户，该接口需要登录后并拥有该接口的访问权限")
     @Debounce
-    public ApiResult<Long> insert(@Validated @RequestBody SysUserRequest request) {
+    public ApiResult insert(@Validated @RequestBody SysUserRequest request) {
         Long id = sysUserService.insert(request);
         return ApiResult.ok(id);
     }
@@ -54,7 +54,7 @@ public class SysUserController {
      */
     @DeleteMapping(path = "delete")
     @Operation(summary = "删除用户", description = "根据用户ID进行对用户删除，该接口需要登录后并拥有该接口的访问权限")
-    public ApiResult<Long> delete(@Validated
+    public ApiResult delete(@Validated
                                   @NotNull(message = "用户ID不能为空")
                                   @DecimalMin(value = "1", message = "用户ID不能小于1")
                                   @Parameter(name = "id", description = "主键")
@@ -72,7 +72,7 @@ public class SysUserController {
      */
     @PutMapping(path = "update")
     @Operation(summary = "修改用户", description = "根据用户ID进行对用户进行修改，该接口需要登录后并拥有该接口的访问权限")
-    public ApiResult<Long> update(@Validated @RequestBody SysUserRequest request) {
+    public ApiResult update(@Validated @RequestBody SysUserRequest request) {
         sysUserService.update(request);
         return ApiResult.ok(request.id());
     }
@@ -85,7 +85,7 @@ public class SysUserController {
      */
     @GetMapping(path = "detail")
     @Operation(summary = "查看用户详情", description = "根据用户ID查看用户的详细信息，该接口需要登录后并拥有该接口的访问权限")
-    public ApiResult<SysUserResponse> detail(@NotNull(message = "用户ID不能为空")
+    public ApiResult detail(@NotNull(message = "用户ID不能为空")
                                              @DecimalMin(value = "1", message = "用户ID不能小于1")
                                              @Parameter(name = "id", description = "主键")
                                              @RequestParam Long id) {
@@ -101,8 +101,8 @@ public class SysUserController {
      * @return 满足条件的所有用户并分页
      */
     @Get(path = "fetch", name = "条件查询用户列表", description = "根据支持的条件查询字段查看用户列表信息，该接口需要登录后并拥有该接口的访问权限")
-    public Pager<SysUserResponse> fetch(Pager<SysUserResponse> pager, SysUserRequest request) {
-        Pager<SysUserResponse> fetch = sysUserService.fetch(pager, request);
+    public Pager fetch(Pager pager, SysUserRequest request) {
+        Pager fetch = sysUserService.fetch(pager, request);
         return fetch;
     }
 

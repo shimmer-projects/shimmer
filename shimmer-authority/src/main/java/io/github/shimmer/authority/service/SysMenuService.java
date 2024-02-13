@@ -52,7 +52,7 @@ public interface SysMenuService {
      * @param request 请求的查询信息
      * @return 查询到的组织信息以及分页信息
      */
-    Pager<SysMenuResponse> fetch(Pager<SysMenuResponse> pager, SysMenuRequest request);
+    Pager fetch(Pager pager, SysMenuRequest request);
 
     List<SysMenuResponse> fetchTree();
 }

@@ -50,7 +50,7 @@ public interface SysUserService {
      * @param request 请求的查询信息
      * @return 查询到的用户信息以及分页信息
      */
-    Pager<SysUserResponse> fetch(Pager<SysUserResponse> pager, SysUserRequest request);
+    Pager fetch(Pager pager, SysUserRequest request);
 
 
     void grant(UserRoleRequest request);

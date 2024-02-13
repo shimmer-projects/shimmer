@@ -59,13 +59,13 @@ public class SysRoleServiceImpl implements SysRoleService {
     }
 
     @Override
-    public Pager<SysRoleResponse> fetch(Pager<SysRoleResponse> pager, SysRoleRequest request) {
-        PageRequest page = PageRequest.of(pager.getPageNo() - 1, pager.getPageSize());
+    public Pager fetch(Pager pager, SysRoleRequest request) {
+        PageRequest page = PageRequest.of(pager.getCurrentPage() - 1, pager.getPageSize());
         SysRoleEntity entity = sysRoleMapper.requestToEntity(request);
         Page<SysRoleEntity> entities = sysRoleRepository.queryWithConditionEntity(entity, page);
         List<SysRoleResponse> responses = entities.stream().map(sysRoleMapper::entityToResponse).toList();
         pager.setPageCount(entities.getTotalPages());
-        pager.setRecordCount(entities.getTotalElements());
+        pager.setTotal(entities.getTotalElements());
         pager.setData(responses);
         return pager;
     }

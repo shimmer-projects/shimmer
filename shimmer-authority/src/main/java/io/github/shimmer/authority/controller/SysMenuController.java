@@ -39,7 +39,7 @@ public class SysMenuController {
      */
     @Post(path = "/insert", name = "新增菜单", description = "用于添加菜单，该接口需要登录后并拥有该接口的访问权限")
     @Debounce
-    public ApiResult<Long> insert(@Validated(VG.C.class) @RequestBody SysMenuRequest request) {
+    public ApiResult insert(@Validated(VG.C.class) @RequestBody SysMenuRequest request) {
         Long id = sysMenuService.insert(request);
         return ApiResult.ok(id);
     }
@@ -52,7 +52,7 @@ public class SysMenuController {
      * @return void
      */
     @Delete(path = "delete", name = "删除菜单", description = "根据菜单ID进行对菜单删除，该接口需要登录后并拥有该接口的访问权限")
-    public ApiResult<Long> delete(@Validated
+    public ApiResult delete(@Validated
                                   @NotNull(message = "菜单ID不能为空")
                                   @DecimalMin(value = "1", message = "菜单ID不能小于1")
                                   @Parameter(name = "id", description = "主键")
@@ -69,7 +69,7 @@ public class SysMenuController {
      * @return void
      */
     @Put(path = "update", name = "修改菜单", description = "根据菜单ID进行对菜单进行修改，该接口需要登录后并拥有该接口的访问权限")
-    public ApiResult<Long> update(@Validated(VG.U.class) @RequestBody SysMenuRequest request) {
+    public ApiResult update(@Validated(VG.U.class) @RequestBody SysMenuRequest request) {
         sysMenuService.update(request);
         return ApiResult.ok();
     }
@@ -82,7 +82,7 @@ public class SysMenuController {
      * @return 主键对应的菜单详细信息
      */
     @Get(path = "detail", name = "查看菜单详情", description = "根据菜单ID查看菜单的详细信息，该接口需要登录后并拥有该接口的访问权限")
-    public ApiResult<SysMenuResponse> detail(@NotNull(message = "菜单ID不能为空")
+    public ApiResult detail(@NotNull(message = "菜单ID不能为空")
                                              @DecimalMin(value = "1", message = "菜单ID不能小于1")
                                              @Parameter(name = "id", description = "主键")
                                              @RequestParam Long id) {
@@ -99,8 +99,8 @@ public class SysMenuController {
      * @return 满足条件的所有菜单并分页
      */
     @Get(path = "fetch", name = "条件查询菜单列表", description = "根据支持的条件查询字段查看菜单列表信息，该接口需要登录后并拥有该接口的访问权限")
-    public Pager<SysMenuResponse> fetch(Pager<SysMenuResponse> pager, SysMenuRequest request) {
-        Pager<SysMenuResponse> fetch = sysMenuService.fetch(pager, request);
+    public Pager fetch(Pager pager, SysMenuRequest request) {
+        Pager fetch = sysMenuService.fetch(pager, request);
         return fetch;
     }
 

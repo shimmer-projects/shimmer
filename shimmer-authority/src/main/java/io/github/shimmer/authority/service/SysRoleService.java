@@ -50,6 +50,6 @@ public interface SysRoleService {
      * @param request 请求的查询信息
      * @return 查询到的角色信息以及分页信息
      */
-    Pager<SysRoleResponse> fetch(Pager<SysRoleResponse> pager, SysRoleRequest request);
+    Pager fetch(Pager pager, SysRoleRequest request);
 
 }

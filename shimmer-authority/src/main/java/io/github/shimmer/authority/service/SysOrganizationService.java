@@ -54,7 +54,7 @@ public interface SysOrganizationService
      * @param request 请求的查询信息
      * @return 查询到的组织信息以及分页信息
      */
-    Pager<SysOrganizationResponse> fetch(Pager<SysOrganizationResponse> pager, SysOrganizationRequest request);
+    Pager fetch(Pager pager, SysOrganizationRequest request);
 
 
     /**

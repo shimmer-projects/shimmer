@@ -38,7 +38,7 @@ public class SysOrganizationController {
      */
     @Post(path = "/insert", name = "新增组织", description = "用于添加组织，该接口需要登录后并拥有该接口的访问权限")
     @Debounce
-    public ApiResult<Long> insert(
+    public ApiResult insert(
             @Validated(VG.C.class) @RequestBody SysOrganizationRequest request) {
         Long id = sysOrganizationService.insert(request);
         return ApiResult.ok(id);
@@ -52,7 +52,7 @@ public class SysOrganizationController {
      * @return void
      */
     @Delete(path = "delete", name = "删除组织", description = "根据组织ID进行对组织删除，该接口需要登录后并拥有该接口的访问权限")
-    public ApiResult<Long> delete(
+    public ApiResult delete(
             @Validated
             @NotNull(message = "组织ID不能为空")
             @DecimalMin(value = "1", message = "组织ID不能小于1")
@@ -70,7 +70,7 @@ public class SysOrganizationController {
      * @return void
      */
     @Put(path = "update", name = "修改组织", description = "根据组织ID进行对组织进行修改，该接口需要登录后并拥有该接口的访问权限")
-    public ApiResult<Long> update(
+    public ApiResult update(
             @Validated(VG.U.class) @RequestBody SysOrganizationRequest request) {
         sysOrganizationService.update(request);
         return ApiResult.ok();
@@ -84,7 +84,7 @@ public class SysOrganizationController {
      * @return 主键对应的组织详细信息
      */
     @Get(path = "detail", name = "查看组织详情", description = "根据组织ID查看组织的详细信息，该接口需要登录后并拥有该接口的访问权限")
-    public ApiResult<SysOrganizationResponse> detail(@NotNull(message = "组织ID不能为空")
+    public ApiResult detail(@NotNull(message = "组织ID不能为空")
                                                      @DecimalMin(value = "1", message = "组织ID不能小于1")
                                                      @Parameter(name = "id", description = "主键")
                                                      Long id) {
@@ -101,8 +101,8 @@ public class SysOrganizationController {
      * @return 满足条件的所有组织并分页
      */
     @Get(path = "fetch", name = "条件查询组织列表", description = "根据支持的条件查询字段查看组织列表信息，该接口需要登录后并拥有该接口的访问权限")
-    public Pager<SysOrganizationResponse> fetch(Pager<SysOrganizationResponse> pager, SysOrganizationRequest request) {
-        Pager<SysOrganizationResponse> fetch = sysOrganizationService.fetch(pager, request);
+    public Pager fetch(Pager pager, SysOrganizationRequest request) {
+        Pager fetch = sysOrganizationService.fetch(pager, request);
         return fetch;
     }
 

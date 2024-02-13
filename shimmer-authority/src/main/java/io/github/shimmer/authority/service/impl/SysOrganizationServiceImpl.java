@@ -60,13 +60,13 @@ public class SysOrganizationServiceImpl implements SysOrganizationService {
     }
 
     @Override
-    public Pager<SysOrganizationResponse> fetch(Pager<SysOrganizationResponse> pager, SysOrganizationRequest request) {
-        PageRequest page = PageRequest.of(pager.getPageNo() - 1, pager.getPageSize());
+    public Pager fetch(Pager pager, SysOrganizationRequest request) {
+        PageRequest page = PageRequest.of(pager.getCurrentPage() - 1, pager.getPageSize());
         SysOrganizationEntity entity = sysOrganizationMapper.requestToEntity(request);
         Page<SysOrganizationResponse> entities = sysOrganizationRepository.queryWithConditionEntity(entity, page)
                 .map(sysOrganizationMapper::entityToResponse);
         pager.setPageCount(entities.getTotalPages());
-        pager.setRecordCount(entities.getTotalElements());
+        pager.setTotal(entities.getTotalElements());
         pager.setData(entities.getContent());
         return pager;
     }

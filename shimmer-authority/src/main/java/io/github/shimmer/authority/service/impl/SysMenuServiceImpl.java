@@ -60,8 +60,8 @@ public class SysMenuServiceImpl implements SysMenuService {
     }
 
     @Override
-    public Pager<SysMenuResponse> fetch(Pager<SysMenuResponse> pager, SysMenuRequest request) {
-        PageRequest page = PageRequest.of(pager.getPageNo() - 1, pager.getPageSize());
+    public Pager fetch(Pager pager, SysMenuRequest request) {
+        PageRequest page = PageRequest.of(pager.getCurrentPage() - 1, pager.getPageSize());
         SysMenuEntity entity = sysMenuMapper.requestToEntity(request);
         Page<SysMenuResponse> entityPage = sysMenuRepository.queryWithConditionEntity(entity, page)
                 .map(sysMenuMapper::entityToResponse);

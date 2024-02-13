@@ -1,6 +1,7 @@
 package io.github.shimmer.authority.service;
 
 
+import io.github.shimmer.authority.request.SysPositionFetchRequest;
 import io.github.shimmer.authority.request.SysPositionRequest;
 import io.github.shimmer.authority.response.SysPositionResponse;
 import io.github.shimmer.core.response.data.Pager;
@@ -46,11 +47,10 @@ public interface SysPositionService {
     /**
      * 根据支持职位查询的字段进行对职位进行分页查询
      *
-     * @param pager   请求的分页信息
      * @param request 请求的查询信息
      * @return 查询到的职位信息以及分页信息
      */
-    Pager<SysPositionResponse> fetch(Pager<SysPositionResponse> pager, SysPositionRequest request);
+    Pager fetch(SysPositionFetchRequest request);
 
 
 }

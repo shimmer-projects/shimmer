@@ -39,7 +39,7 @@ public class SysRoleController {
      */
     @Post(path = "/insert", name = "新增角色", description = "用于添加角色，该接口需要登录后并拥有该接口的访问权限")
     @Debounce
-    public ApiResult<Long> insert(@Validated(VG.C.class) @RequestBody SysRoleRequest request) {
+    public ApiResult insert(@Validated(VG.C.class) @RequestBody SysRoleRequest request) {
         Long id = sysRoleService.insert(request);
         return ApiResult.ok(id);
     }
@@ -51,7 +51,7 @@ public class SysRoleController {
      * @return void
      */
     @Delete(path = "delete", name = "删除角色", description = "根据角色ID进行对角色删除，该接口需要登录后并拥有该接口的访问权限")
-    public ApiResult<Long> delete(@Validated
+    public ApiResult delete(@Validated
                                   @NotNull(message = "角色ID不能为空")
                                   @DecimalMin(value = "1", message = "角色ID不能小于1")
                                   @Parameter(name = "id", description = "主键")
@@ -67,7 +67,7 @@ public class SysRoleController {
      * @return void
      */
     @Put(path = "update", name = "修改角色", description = "根据角色ID进行对角色进行修改，该接口需要登录后并拥有该接口的访问权限")
-    public ApiResult<Long> update(@Validated(VG.U.class) @RequestBody SysRoleRequest request) {
+    public ApiResult update(@Validated(VG.U.class) @RequestBody SysRoleRequest request) {
         sysRoleService.update(request);
         return ApiResult.ok();
     }
@@ -79,7 +79,7 @@ public class SysRoleController {
      * @return 主键对应的角色详细信息
      */
     @Get(path = "detail", name = "查看角色详情", description = "根据角色ID查看角色的详细信息，该接口需要登录后并拥有该接口的访问权限")
-    public ApiResult<SysRoleResponse> detail(@NotNull(message = "角色ID不能为空")
+    public ApiResult detail(@NotNull(message = "角色ID不能为空")
                                              @DecimalMin(value = "1", message = "角色ID不能小于1")
                                              @Parameter(name = "id", description = "主键")
                                              @RequestParam Long id) {
@@ -95,8 +95,8 @@ public class SysRoleController {
      * @return 满足条件的所有角色并分页
      */
     @Get(path = "fetch", name = "条件查询角色列表", description = "根据支持的条件查询字段查看角色列表信息，该接口需要登录后并拥有该接口的访问权限")
-    public Pager<SysRoleResponse> fetch(Pager<SysRoleResponse> pager, SysRoleRequest request) {
-        Pager<SysRoleResponse> fetch = sysRoleService.fetch(pager, request);
+    public Pager fetch(Pager pager, SysRoleRequest request) {
+        Pager fetch = sysRoleService.fetch(pager, request);
         return fetch;
     }
 

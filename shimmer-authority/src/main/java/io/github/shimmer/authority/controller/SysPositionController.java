@@ -1,5 +1,6 @@
 package io.github.shimmer.authority.controller;
 
+import io.github.shimmer.authority.request.SysPositionFetchRequest;
 import io.github.shimmer.authority.request.SysPositionRequest;
 import io.github.shimmer.authority.response.SysPositionResponse;
 import io.github.shimmer.authority.service.SysPositionService;
@@ -36,7 +37,7 @@ public class SysPositionController {
      */
     @Post(path = "/insert", name = "新增职位", description = "用于添加职位，该接口需要登录后并拥有该接口的访问权限")
     @Debounce
-    public ApiResult<Long> insert(@Validated(VG.C.class) @RequestBody SysPositionRequest request) {
+    public ApiResult insert(@Validated(VG.C.class) @RequestBody SysPositionRequest request) {
         Long id = sysPositionService.insert(request);
         return ApiResult.ok(id);
     }
@@ -49,7 +50,7 @@ public class SysPositionController {
      * @return void
      */
     @Delete(path = "delete", name = "删除职位", description = "根据职位ID进行对职位删除，该接口需要登录后并拥有该接口的访问权限")
-    public ApiResult<Long> delete(@Validated
+    public ApiResult delete(@Validated
                                   @NotNull(message = "职位ID不能为空")
                                   @DecimalMin(value = "1", message = "职位ID不能小于1")
                                   @Parameter(name = "id", description = "主键")
@@ -66,9 +67,9 @@ public class SysPositionController {
      * @return void
      */
     @Put(path = "update", name = "修改职位", description = "根据职位ID进行对职位进行修改，该接口需要登录后并拥有该接口的访问权限")
-    public ApiResult<Long> update(@Validated(VG.U.class) @RequestBody SysPositionRequest request) {
+    public ApiResult update(@Validated(VG.U.class) @RequestBody SysPositionRequest request) {
         sysPositionService.update(request);
-        return ApiResult.ok();
+        return ApiResult.ok(request.getId());
     }
 
 
@@ -79,7 +80,7 @@ public class SysPositionController {
      * @return 主键对应的职位详细信息
      */
     @Get(path = "detail", name = "查看职位详情", description = "根据职位ID查看职位的详细信息，该接口需要登录后并拥有该接口的访问权限")
-    public ApiResult<SysPositionResponse> detail(@NotNull(message = "职位ID不能为空")
+    public ApiResult detail(@NotNull(message = "职位ID不能为空")
                                                  @DecimalMin(value = "1", message = "职位ID不能小于1")
                                                  @Parameter(name = "id", description = "主键")
                                                  @RequestParam Long id) {
@@ -96,8 +97,9 @@ public class SysPositionController {
      * @return 满足条件的所有职位并分页
      */
     @Get(path = "fetch", name = "条件查询职位列表", description = "根据支持的条件查询字段查看职位列表信息，该接口需要登录后并拥有该接口的访问权限")
-    public Pager<SysPositionResponse> fetch(Pager<SysPositionResponse> pager, SysPositionRequest request) {
-        Pager<SysPositionResponse> fetch = sysPositionService.fetch(pager, request);
+    @Debounce
+    public Pager fetch(SysPositionFetchRequest request) {
+        Pager fetch = sysPositionService.fetch(request);
         return fetch;
     }
 

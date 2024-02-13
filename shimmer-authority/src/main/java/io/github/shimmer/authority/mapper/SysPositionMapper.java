@@ -1,6 +1,7 @@
 package io.github.shimmer.authority.mapper;
 
 import io.github.shimmer.authority.entity.SysPositionEntity;
+import io.github.shimmer.authority.request.SysPositionFetchRequest;
 import io.github.shimmer.authority.request.SysPositionRequest;
 import io.github.shimmer.authority.response.SysPositionResponse;
 import org.mapstruct.Mapper;
@@ -35,6 +36,18 @@ public interface SysPositionMapper {
             @Mapping(target = "version", ignore = true)
     })
     SysPositionEntity requestToEntity(SysPositionRequest request);
+
+    @Mappings({
+            @Mapping(target = "roles", ignore = true),
+            @Mapping(target = "users", ignore = true),
+            @Mapping(target = "creator", ignore = true),
+            @Mapping(target = "createTime", ignore = true),
+            @Mapping(target = "modifier", ignore = true),
+            @Mapping(target = "modifyTime", ignore = true),
+            @Mapping(target = "tombstone", ignore = true),
+            @Mapping(target = "version", ignore = true)
+    })
+    SysPositionEntity requestToEntity(SysPositionFetchRequest request);
 
 
     /**

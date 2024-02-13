@@ -58,7 +58,7 @@ public class AuthorityAutoConfig {
                 .cors(configurer -> configurer.configurationSource(corCsonfigurationSource()))
                 .addFilterBefore(jwtAuthenticationFilter(), AuthorizationFilter.class)
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/**").permitAll()
                         .anyRequest().authenticated()
                 );
 

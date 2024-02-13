@@ -3,6 +3,7 @@ package io.github.shimmer.authority.service.impl;
 import io.github.shimmer.authority.entity.SysPositionEntity;
 import io.github.shimmer.authority.mapper.SysPositionMapper;
 import io.github.shimmer.authority.repository.SysPositionRepository;
+import io.github.shimmer.authority.request.SysPositionFetchRequest;
 import io.github.shimmer.authority.request.SysPositionRequest;
 import io.github.shimmer.authority.response.SysPositionResponse;
 import io.github.shimmer.authority.service.SysPositionService;
@@ -45,7 +46,7 @@ public class SysPositionServiceImpl implements SysPositionService {
 
     @Override
     public void update(SysPositionRequest request) {
-        SysPositionEntity entity = sysPositionRepository.findById(request.id()).orElseThrow();
+        SysPositionEntity entity = sysPositionRepository.findById(request.getId()).orElseThrow();
         sysPositionMapper.requestToEntity(entity, request);
         sysPositionRepository.save(entity);
     }
@@ -59,11 +60,12 @@ public class SysPositionServiceImpl implements SysPositionService {
     }
 
     @Override
-    public Pager<SysPositionResponse> fetch(Pager<SysPositionResponse> pager, SysPositionRequest request) {
-        PageRequest page = PageRequest.of(pager.getPageNo() - 1, pager.getPageSize());
+    public Pager fetch(SysPositionFetchRequest request) {
+        PageRequest page = PageRequest.of(request.getCurrentPage() - 1, request.getPageSize());
         SysPositionEntity entity = sysPositionMapper.requestToEntity(request);
         Page<SysPositionResponse> entities = sysPositionRepository.queryWithConditionEntity(entity, page)
                 .map(sysPositionMapper::entityToResponse);
-        return PageMapper.mapper(pager, entities);
+        Pager mapper = PageMapper.mapper(request, entities);
+        return mapper;
     }
 }
