@@ -3,6 +3,7 @@ package io.github.shimmer.core.response;
 import io.github.shimmer.core.ShimmerCoreProperties;
 import io.github.shimmer.core.response.data.ApiCode;
 import io.github.shimmer.core.response.data.ApiResult;
+import io.github.shimmer.core.response.data.Pager;
 import io.github.shimmer.utils.Utils;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -54,10 +55,10 @@ public class NotVoidResponseBodyAdvice extends AbstractCostResponseBodyAdvice {
             log.debug("Response:响应结果为ResponseEntity，跳过。");
             return false;
         }
-        if (responseClass.equals(ApiResult.class)) {
-            log.debug("Response:响应结果已经是ApiResult，跳过。");
-            return false;
-        }
+//        if (responseClass.equals(ApiResult.class)) {
+//            log.debug("Response:响应结果已经是ApiResult，跳过。");
+//            return false;
+//        }
 
         Class<?> superClass = methodParameter.getDeclaringClass();
         Method method = methodParameter.getMethod();
@@ -121,13 +122,19 @@ public class NotVoidResponseBodyAdvice extends AbstractCostResponseBodyAdvice {
         if (match) {
             return body;
         }
+        if (body instanceof ApiResult) {
+            return body;
+        }
 
-        log.debug("完成结果值封装");
-        return ApiResult.builder()
+        ApiResult.ApiResultBuilder result = ApiResult.builder()
                 .code(ApiCode.OK.getCode())
                 .desc("success")
                 .time(System.currentTimeMillis())
-                .data(body)
-                .build();
+                .data(body);
+        if (body instanceof Pager pager) {
+            result = result.page(pager).data(pager.getData());
+        }
+        log.debug("完成结果值封装");
+        return result.build();
     }
 }

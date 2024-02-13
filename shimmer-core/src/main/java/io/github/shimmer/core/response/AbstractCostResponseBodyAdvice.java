@@ -32,7 +32,7 @@ public abstract class AbstractCostResponseBodyAdvice implements ResponseBodyAdvi
                                   @NonNull ServerHttpRequest request,
                                   @NonNull ServerHttpResponse response) {
         Object done = doBeforeBodyWrite(body, returnType, selectedContentType, selectedConverterType, request, response);
-        if (done instanceof ApiResult<?> apiResult) {
+        if (done instanceof ApiResult apiResult) {
             apiResult.setCost(costAspect.cost());
         }
         return done;

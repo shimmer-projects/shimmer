@@ -14,19 +14,19 @@ import org.springframework.data.domain.Page;
 public final class PageMapper {
 
 
-    public static <T> Pager<T> mapper(Page<T> page) {
-        return mapper(new Pager<>(), page);
+    public static Pager mapper(Page<?> page) {
+        return mapper(new Pager(), page);
     }
 
-    public static <T> Pager<T> mapper(Pager<T> pager, Page<T> page) {
+    public static Pager mapper(Pager pager, Page<?> page) {
         // 当前页
-        pager.setPageNo(page.getNumber() + 1);
+        pager.setCurrentPage(page.getNumber() + 1);
         // 每页条数
         pager.setPageCount(pager.getPageCount());
         // 总页数
         pager.setPageCount(page.getTotalPages());
         // 总条数
-        pager.setRecordCount(page.getTotalElements());
+        pager.setTotal(page.getTotalElements());
         // 数据内容
         pager.setData(page.getContent());
         // 是否第一页

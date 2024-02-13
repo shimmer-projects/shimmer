@@ -65,7 +65,7 @@ public class GlobalExceptionHandlerAdvice {
     @ExceptionHandler(StringToApiResult.class)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public ApiResult<Object> stringToApiResult(StringToApiResult result) {
+    public ApiResult stringToApiResult(StringToApiResult result) {
         return result.getApiResult();
     }
 
@@ -103,7 +103,7 @@ public class GlobalExceptionHandlerAdvice {
     @ExceptionHandler(value = {BindException.class, MethodArgumentNotValidException.class})
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public ApiResult<Object> handleBindException(BindException ex) {
+    public ApiResult handleBindException(BindException ex) {
         List<FieldError> fieldErrors = ex.getFieldErrors();
         List<ValidError> validErrors = new ArrayList<>();
         for (FieldError error : fieldErrors) {
@@ -128,7 +128,7 @@ public class GlobalExceptionHandlerAdvice {
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public ApiResult<Object> handleConstraintViolationException(ConstraintViolationException ex) {
+    public ApiResult handleConstraintViolationException(ConstraintViolationException ex) {
         List<ValidError> validErrors = new ArrayList<>();
         Set<ConstraintViolation<?>> violations = ex.getConstraintViolations();
         for (ConstraintViolation<?> violation : violations) {
@@ -158,7 +158,7 @@ public class GlobalExceptionHandlerAdvice {
     @ExceptionHandler(IOException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
-    public ApiResult<Object> handleFileNotFoundException(IOException ex) {
+    public ApiResult handleFileNotFoundException(IOException ex) {
         String body = "系统找不到指定的文件或路径: " + ex.getMessage().substring(ex.getMessage().indexOf(": ") + 2);
         return ApiResult.fail(String.format(REASON, "文件找不到异常", body));
     }
@@ -170,7 +170,7 @@ public class GlobalExceptionHandlerAdvice {
     @ExceptionHandler(ArithmeticException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
-    public ApiResult<Object> handleArithmeticException(ArithmeticException ex) {
+    public ApiResult handleArithmeticException(ArithmeticException ex) {
         return ApiResult.fail(String.format(REASON, "数学运算异常", ex.getMessage()));
     }
 
@@ -182,7 +182,7 @@ public class GlobalExceptionHandlerAdvice {
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
     @ResponseBody
-    public ApiResult<Object> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException ex) {
+    public ApiResult handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException ex) {
         return ApiResult.fail(String.format(REASON, "请求方法不允许", ex.getMessage()));
     }
 
@@ -195,7 +195,7 @@ public class GlobalExceptionHandlerAdvice {
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     @ResponseStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
     @ResponseBody
-    public ApiResult<Object> handleHttpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException ex) {
+    public ApiResult handleHttpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException ex) {
         return ApiResult.fail(String.format(REASON, "请求媒体不支持", ex.getMessage()));
     }
 
@@ -205,7 +205,7 @@ public class GlobalExceptionHandlerAdvice {
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public ApiResult<Object> handleIllegalArgumentException(IllegalArgumentException ex) {
+    public ApiResult handleIllegalArgumentException(IllegalArgumentException ex) {
         return ApiResult.fail(String.format(REASON, "请求参数不合法", ex.getMessage()));
     }
 
@@ -215,7 +215,7 @@ public class GlobalExceptionHandlerAdvice {
     @ExceptionHandler(NoHandlerFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ResponseBody
-    public ApiResult<Object> handleNoHandlerFoundException(NoHandlerFoundException ex) {
+    public ApiResult handleNoHandlerFoundException(NoHandlerFoundException ex) {
         return ApiResult.fail(String.format(REASON, "请求路径不存在", ex.getRequestURL()));
     }
 
@@ -226,7 +226,7 @@ public class GlobalExceptionHandlerAdvice {
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiResult<Object> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
+    public ApiResult handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
         return ApiResult.fail(String.format(REASON, "请求body参数不可读", ex.getMessage()));
     }
 
@@ -236,7 +236,7 @@ public class GlobalExceptionHandlerAdvice {
     @ExceptionHandler(HttpMessageNotWritableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public ApiResult<Object> handleHttpMessageNotWritableException(HttpMessageNotWritableException ex) {
+    public ApiResult handleHttpMessageNotWritableException(HttpMessageNotWritableException ex) {
         return ApiResult.fail(String.format(REASON, "响应序列化失败", ex.getMessage()));
     }
 
@@ -246,7 +246,7 @@ public class GlobalExceptionHandlerAdvice {
     @ExceptionHandler(MissingServletRequestParameterException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public ApiResult<Object> handleMissingServletRequestParameterException(MissingServletRequestParameterException ex) {
+    public ApiResult handleMissingServletRequestParameterException(MissingServletRequestParameterException ex) {
         return ApiResult.fail(String.format(REASON, "缺少请求参数", ex.getParameterName()));
     }
 
@@ -258,7 +258,7 @@ public class GlobalExceptionHandlerAdvice {
     @ExceptionHandler(MissingPathVariableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public ApiResult<Object> handleMissingPathVariableException(MissingPathVariableException ex) {
+    public ApiResult handleMissingPathVariableException(MissingPathVariableException ex) {
         return ApiResult.fail(String.format(REASON, "未检测到路径参数", ex.getParameter().getParameterName()));
     }
 
@@ -269,14 +269,14 @@ public class GlobalExceptionHandlerAdvice {
     @ExceptionHandler(TypeMismatchException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public ApiResult<Object> handleTypeMismatchException(TypeMismatchException ex) {
+    public ApiResult handleTypeMismatchException(TypeMismatchException ex) {
         return ApiResult.fail(String.format(REASON, "参数类型匹配失败", ex.getPropertyName()));
     }
 
     @ExceptionHandler(BizException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
-    public ApiResult<Object> handleBizException(BizException ex) {
+    public ApiResult handleBizException(BizException ex) {
         if (printExceptionInGlobalAdvice) {
             log.error("Response:GlobalExceptionHandleAdvice捕获到异常,message=[{}]", ex.getMessage(), ex);
         }
@@ -288,7 +288,7 @@ public class GlobalExceptionHandlerAdvice {
      */
     @ExceptionHandler
     @ResponseBody
-    public ResponseEntity<ApiResult<Object>> handleGlobalException(Throwable throwable) {
+    public ResponseEntity<ApiResult> handleGlobalException(Throwable throwable) {
         if (printExceptionInGlobalAdvice) {
             log.error("Response:GlobalExceptionHandleAdvice捕获到异常,message=[{}]", throwable.getMessage(), throwable);
         }
@@ -305,13 +305,13 @@ public class GlobalExceptionHandlerAdvice {
                     message = throwableMessage;
                 }
             }
-            ApiResult<Object> res = ApiResult.builder().code(exceptionMapper.code()).desc(message).build();
+            ApiResult res = ApiResult.builder().code(exceptionMapper.code()).desc(message).build();
             return ResponseEntity.status(exceptionMapper.httpStatus()).body(res);
 
         }
 
         // 2.原生异常直接包装返回
-        ApiResult<Object> res = ApiResult.fail(String.format(REASON, "系统内部异常", throwable.getMessage()));
+        ApiResult res = ApiResult.fail(String.format(REASON, "系统内部异常", throwable.getMessage()));
         return ResponseEntity.internalServerError().body(res);
     }
 

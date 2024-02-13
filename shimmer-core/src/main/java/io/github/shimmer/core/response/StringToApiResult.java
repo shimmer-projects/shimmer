@@ -12,9 +12,9 @@ import lombok.Getter;
 @Getter
 public class StringToApiResult extends RuntimeException {
 
-    private final transient ApiResult<Object> apiResult;
+    private final transient ApiResult apiResult;
 
-    public StringToApiResult(ApiResult<Object> apiResult) {
+    public StringToApiResult(ApiResult apiResult) {
         this.apiResult = apiResult;
     }
 }

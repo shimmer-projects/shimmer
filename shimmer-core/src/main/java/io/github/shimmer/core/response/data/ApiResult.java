@@ -1,5 +1,6 @@
 package io.github.shimmer.core.response.data;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -19,8 +20,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Schema(name = "ApiResult", description = "统一响应包装体")
-@JsonPropertyOrder({"code", "desc", "time", "cost", "data"})
-public class ApiResult<T> {
+@JsonInclude(JsonInclude.Include.NON_NULL) // 使用JsonInclude注解指明只包含非null的属性，即排除值为null的属性
+@JsonPropertyOrder({"code", "desc", "time", "cost", "page", "data"})
+public class ApiResult {
 
     /**
      * 请求响应码，区别于HTTP原始状态码，这个更业务一些。
@@ -45,33 +47,35 @@ public class ApiResult<T> {
     @Schema(description = "接口耗时")
     private long cost;
 
+    @Schema(description = "分页信息")
+    private Pager page;
     /**
      * 真正的响应数据
      */
     @Schema(description = "响应数据")
-    private T data;
+    private Object data;
 
-    public static <T> ApiResult<T> fail(String desc) {
+    public static ApiResult fail(String desc) {
         return fail(ApiCode.ERROR, desc);
     }
 
-    public static <T> ApiResult<T> fail(String code, String desc) {
-        return ApiResult.<T>builder().code(code).desc(desc).build();
+    public static ApiResult fail(String code, String desc) {
+        return ApiResult.builder().code(code).desc(desc).build();
     }
 
-    public static <T> ApiResult<T> fail(ApiCode code) {
-        return ApiResult.<T>builder().code(code.getCode()).desc(code.getMsg()).build();
+    public static ApiResult fail(ApiCode code) {
+        return ApiResult.builder().code(code.getCode()).desc(code.getMsg()).build();
     }
 
-    public static <T> ApiResult<T> fail(ApiCode code, String desc) {
-        return ApiResult.<T>builder().code(code.getCode()).desc(desc).build();
+    public static ApiResult fail(ApiCode code, String desc) {
+        return ApiResult.builder().code(code.getCode()).desc(desc).build();
     }
 
-    public static <T> ApiResult<T> ok() {
+    public static ApiResult ok() {
         return ApiResult.ok(null);
     }
 
-    public static <T> ApiResult<T> ok(T data) {
-        return ApiResult.<T>builder().code(ApiCode.OK.getCode()).desc(ApiCode.OK.getMsg()).data(data).build();
+    public static ApiResult ok(Object data) {
+        return ApiResult.builder().code(ApiCode.OK.getCode()).desc(ApiCode.OK.getMsg()).data(data).build();
     }
 }

@@ -45,7 +45,7 @@ public class StringResponseBodyAdvice extends AbstractCostResponseBodyAdvice {
         // 过滤String类型，String单独序列化方式
         // 方式1：将StringHttpMessageConverter从配置中移除 (不推荐)
         // 方式2: 契合下StringHttpMessageConverter，封装ApiResult，然后将ApiResult进行Json字符串的转换
-        ApiResult<Object> apiResult = ApiResult.ok(body);
+        ApiResult apiResult = ApiResult.ok(body);
         apiResult.setCost(costAspect.cost());
         // return objectMapper.writeValueAsString(apiResult);
         // 使用json序列化为字符串之后，虽然返回的是json格式，但是响应的content-type 不是application/json，而是text/html.因此通过异常的形式进行一次转换
